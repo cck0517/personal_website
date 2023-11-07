@@ -226,5 +226,30 @@ it must be in other files***************************/
   transform: translateY(-100%);
 }
 
+.copyright-text {
+  font-size: 16px;
+  font-weight: normal;
+  display: block;
+}
 
+.myfooter{
+  position: absolute; 
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  text-align: center; 
+  padding: 10px 0; /* Add padding for spacing */
+}
+.about-image{
+  background-image: url("images/selftwo.png"); /* Set the default image */
+  background-size: cover;
+  background-position: center;
+  transition: background-image 0.3s; /* Add a smooth transition effect */
 
+  /* Other styles for the container if needed */
+}
+
+/* Change the background image on hover */
+.about-image:hover {
+  background-image: url("images/selfone.png"); /* Set the image to display on hover */
+}
