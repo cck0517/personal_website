@@ -84,6 +84,8 @@ b, strong {
     margin-top: 5px;
     min-width: 260px;
     position: relative;
+    width: 100%
+
 }
   
 .animated-item {
