@@ -72,7 +72,7 @@ b, strong {
   font-weight: bold;
 }
 
-/* below is the animated item, that is the line showing Iam chengkun CAO */
+/* below is the animated item, that is the line showing I am chengkun CAO */
 
 .animated {
     position: relative;
@@ -93,17 +93,18 @@ b, strong {
 }
   
 .animated-item {
-    font-size: 38px;
-    line-height: inherit;
-    display: block;
-    opacity: 0;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    right: 0;
-    left: 0;
-    animation: BottomTotop 6s linear infinite 0s;
+  font-size: 38px;
+  line-height: inherit;
+  display: block;
+  opacity: 0;
+  overflow: hidden;
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  animation: BottomTotop 6s linear infinite 0s;
 }
+
 
 @keyframes BottomTotop {
     0% {
@@ -111,7 +112,7 @@ b, strong {
     }
     5% {
       opacity: 0;
-      transform: translateY(5px);
+      transform: translateX(10px);
     }
     10% {
       opacity: 1;
@@ -123,7 +124,7 @@ b, strong {
     }
     30% {
       opacity: 0;
-      transform: translateY(5px);
+      transform: translateX(-10px);
     }
     80% {
       opacity: 0;
@@ -132,6 +133,7 @@ b, strong {
       opacity: 0;
     }
 }
+
 .animated-item:nth-child(2n+2) {
   animation-delay: 2.2s;
 }
@@ -251,7 +253,18 @@ it must be in other files***************************/
   /* Other styles for the container if needed */
 }
 
-/* Change the background image on hover */
-.about-image:hover {
-  background-image: url("images/selfone.png"); /* Set the image to display on hover */
+
+/* add a hovering floating effect to the paragraph*/
+
+p {
+  transition: transform 0.3s ease;
 }
+
+p:hover {
+  transform: translateY(-3px);
+  text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+
+
+  
