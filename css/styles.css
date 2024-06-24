@@ -240,7 +240,7 @@ it must be in other files***************************/
 }
 
 .myfooter{
-  position: absolute; 
+  position: relative; 
   bottom: 0;
   left: 0;
   width: 100%;
@@ -269,5 +269,83 @@ p:hover {
 }
 
 
+
+/* experience section*/
+
+/* .experience-item:hover {
+  transform: scale(1.02); 
+  transition: transform 0.3s ease-in-out;
+}
+
+.experiences-section h2 {
+  text-align: center;  
+  color: #333;  
+  margin-bottom: 30px; 
+}
+
+
+.experience-item h3 {
+  color: #007bff; 
+}
+
+.experience-item .date {
+  font-style: italic;
+  color: #666;  
+  margin-bottom: 10px; 
+}
+
+ul {
+  list-style-type: none;  
+  padding: 0;  
+}
+
+ul li {
+  margin-bottom: 5px;  
+}
+
+ul li::before {
+  content: '• ';  
+  color: #007bff;  
+  font-size: large; 
+} */
+
+.experience-item {
+  display: flex;
+  align-items: center; /* Align items vertically */
+  margin-bottom: 20px;
+  padding: 10px;
+  /* background-color: #f9f9f9; */
+}
+
+.experience-logo {
+  width: 80px; /* Fixed width for consistency */
+  height: auto; /* Maintain aspect ratio */
+  margin-right: 20px; /* Space between the logo and the text */
+}
+
+.experience-details {
+  flex-grow: 1; /* Allow the text area to fill the remaining space */
+}
+
+@media (max-width: 768px) {
+  .experience-item {
+      flex-direction: column;
+      align-items: start;
+  }
+
+  .experience-logo {
+      margin-bottom: 10px; /* Space below the logo when stacked */
+  }
+}
+
+.experience-logo:hover {
+  transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+}
+
+.experience-item:hover {
+  transform: scale(1.02); 
+  transition: transform 0.3s ease-in-out;
+}
 
   
