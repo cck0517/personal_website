@@ -269,52 +269,32 @@ p:hover {
 }
 
 
+/* Below part is for the experience section*/
 
-/* experience section*/
-
-/* .experience-item:hover {
-  transform: scale(1.02); 
-  transition: transform 0.3s ease-in-out;
+.experiences-section {
+  display: flex;
+  justify-content: center; /* Center align the container */
+  padding: 20px 0; /* Add padding for better spacing */
 }
 
 .experiences-section h2 {
-  text-align: center;  
-  color: #333;  
-  margin-bottom: 30px; 
+  margin-bottom: 30px; /* Increase bottom margin for more space below the title */
 }
 
-
-.experience-item h3 {
-  color: #007bff; 
+.container {
+  width: 100%; /* Use full width to be controlled by max-width */
+  max-width: 960px; /* Maximum width of the container */
+  margin: 0 auto; /* Auto margin for horizontal centering */
 }
-
-.experience-item .date {
-  font-style: italic;
-  color: #666;  
-  margin-bottom: 10px; 
-}
-
-ul {
-  list-style-type: none;  
-  padding: 0;  
-}
-
-ul li {
-  margin-bottom: 5px;  
-}
-
-ul li::before {
-  content: '• ';  
-  color: #007bff;  
-  font-size: large; 
-} */
 
 .experience-item {
+  margin-top: 20px; /* Adds more space above each experience item */
   display: flex;
   align-items: center; /* Align items vertically */
   margin-bottom: 20px;
   padding: 10px;
-  /* background-color: #f9f9f9; */
+  text-align: left; /* Align text to the left inside each item */
+  border-left: 4px solid #84CEEB; /* Blue left border for a pop of color */
 }
 
 .experience-logo {
@@ -323,8 +303,22 @@ ul li::before {
   margin-right: 20px; /* Space between the logo and the text */
 }
 
-.experience-details {
-  flex-grow: 1; /* Allow the text area to fill the remaining space */
+
+.experience-details h3 {
+  margin-bottom: 0; /* Reduces space between the h3 and the p tag if necessary */
+  font-size: 1.25em; /* Adjust font size as necessary */
+}
+
+.company-and-date {
+  margin-top: 0.5em; /* Adds a little space between the title and this line */
+  font-size: 1em; /* Keeps font size standard but adjustable */
+  color: #333; /* Optional: Adjust color for visual distinction */
+}
+
+.date {
+  font-style: italic; /* Keeps date italicized */
+  color: #666; /* Lighter color for the date */
+  padding-left: 5px; /* Space between the company name and the date */
 }
 
 @media (max-width: 768px) {
@@ -349,3 +343,6 @@ ul li::before {
 }
 
   
+.short-intro {
+  margin-bottom: 2rem; /* add more space between buttons and short intro */
+}
