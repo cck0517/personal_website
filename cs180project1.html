@@ -5,58 +5,222 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CS180 Project 1 Showcase</title>
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="css\cs180proj1.css">
 </head>
 <body>
     <header>
-        <h1>CS180 Project 1 Showcase</h1>
+        <h1>CS180 Project 1</h1>
     </header>
 
     <!-- Image Showcase Section -->
     <section class="image-showcase">
         <h2>Results</h2>
+        <p>This is the final result of processed photos. I have included the execution time (all using image pyramid algorithm for searching),
+            displacement vector for r and g under each result (drx represents displacement x for r, and dgx represents the displacemment x for g, same for y.)
+            Note that some image here are actually also post processed (the Bell's and Whistles are applied), but the run time written is simply for pyramid search (to avoid confusion)
+           
+        </p>
         <div class="image-grid">
-            <img src="path/to/image1.jpg" alt="Result 1">
-            <img src="path/to/image2.jpg" alt="Result 2">
-            <img src="path/to/image3.jpg" alt="Result 3">
-            <img src="path/to/image4.jpg" alt="Result 4">
-            <img src="path/to/image5.jpg" alt="Result 5">
-            <img src="path/to/image6.jpg" alt="Result 6">
-            <img src="path/to/image7.jpg" alt="Result 7">
-            <img src="path/to/image8.jpg" alt="Result 8">
-            <img src="path/to/image9.jpg" alt="Result 9">
-            <img src="path/to/image10.jpg" alt="Result 10">
-            <img src="path/to/image11.jpg" alt="Result 11">
-            <img src="path/to/image12.jpg" alt="Result 12">
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/sculptures.jpg" alt="Result 1">
+                <p>56.741332 seconds, drx is -27 ,dry is 140, dgx is -11, dgy is 33 </p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/harvesters.jpg" alt="Result 2">
+                <p>45.554909 seconds, drx is 15 ,dry is 123, dgx is 18, dgy is 60</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/emir_edge.jpg" alt="Result 3">
+                <p>50.795223 seconds,drx is 40 ,dry is 107, dgx is 23, dgy is 49 </p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/church_without_contrast.jpg" alt="Result 4">
+                <p>46.741573 seconds, drx is -4 ,dry is 58, dgx is 4, dgy is 25</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/self_without_contrast.jpg" alt="Result 5">
+                <p>48.057991 seconds, drx is 37 ,dry is 175, dgx is 29, dgy is 77 </p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/icon.jpg" alt="Result 6">
+                <p>46.626309 seconds, drx is 22 ,dry is 88, dgx is 16, dgy is 38</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/in_without_contrast.jpg" alt="Result 7">
+                <p>79.085861 seconds, drx is 29 ,dry is 85, dgx is 8, dgy is 40 </p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/lady.jpg" alt="Result 8">
+                <p>46.953040 seconds, drx is 13 ,dry is 120, dgx is 9, dgy is 57</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/melons_without_contrast.jpg" alt="Result 9">
+                <p>47.130739 seconds, drx is 14 ,dry is 177, dgx is 9, dgy is 79</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/monastery_without_contrast.jpg" alt="Result 10">
+                <p>0.498219 seconds, drx is 2 ,dry is 3, dgx is 2, dgy is -3</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/obol_without_contrast.jpg" alt="Result 11">
+                <p>0.853735 seconds,drx is 3 ,dry is 6, dgx is 3, dgy is 3 </p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/onions_without_contrast.jpg" alt="Result 12">
+                <p>47.003409 seconds, drx is 34 ,dry is 107, dgx is 24, dgy is 52</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/cathedral.jpg" alt="Result 13">
+                <p>0.485736 seconds, drx is 3 ,dry is 12, dgx is 2, dgy is 5</p>
+            </div>
+            <div class="image-item">
+                <img src="assets/cs180proj1/toshow/hree.jpg" alt="Result 14">
+                <p>68.316669 seconds, drx is 8 ,dry is 111, dgx is 17, dgy is 58</p>
+            </div>
         </div>
     </section>
 
     <!-- Text and Images Block Section -->
     <section class="content-block">
-        <h2>Project Details</h2>
+        <h2>Naive Implementation and Image Pyramid</h2>
 
         <div class="block">
-            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus lacinia odio vitae vestibulum vestibulum.</p>
-            <div class="block-images">
-                <img src="path/to/image13.jpg" alt="Block Image 1">
-                <img src="path/to/image14.jpg" alt="Block Image 2">
-            </div>
-            <p>Cras quis justo nec orci consequat tincidunt. Phasellus vitae turpis a urna tempor fermentum.</p>
+            <p>I am using the Euclidean Distance as metric, and during alignment (both naive and image pyramid) I try to minimize the Ecuclidean Distances between two image.
+                One problem that I met implementing the naive approach is that the border has too much noise and affects the metric calculation badly. The solution I used to deal with this is 
+                only calculate the Euclidean distance between pixels that are not on the border area when scoring different displacements.
+                I used an iterative approach to implement image pyramid searching for larger photos, where I first iteratively downscale the photo by a factor of two, till the size of image
+                reach some threshold, and begin from the most coarse grained image, find the displacement, then use the rough estimate as a starting point to search over a given window for finer-grained images.
+            </p>
         </div>
-
+         
+        <h2>Bells and Whistles -- Adding edge as a new feature</h2>
         <div class="block">
-            <p>Nullam vehicula, leo a viverra elementum, orci orci dictum libero, in tempus lacus sem et nibh.</p>
-            <div class="block-images">
-                <img src="path/to/image15.jpg" alt="Block Image 3">
+            <p>
+                For some images, simply calculating the Euclidean Distance using the raw pixels does not achieve good results. 
+                For example, as we can see below, using naive raw pixels is apparently not enough. I added edge as a new feature, 
+                extracting the edges of different images and calculating the Euclidean Distance between different edges as a new 
+                feature to determine the best displacement. In theory, I can use edges + raw pixels to score displacement, but in practice, 
+                I found only using edge is good enough. Another thing to mention is that calculating edge difference takes significantly more 
+                time than the raw pixels, but implementing it with a similar image pyramid algorithm greatly improves speed. On the right are the 
+                results of alignment using edge as a bonus feature.
+            </p>
+            
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets/cs180proj1/edge_as_feature/emir_naive.jpg" alt="Block Image 1">
+                    <p>Using only raw pixels as feature, does not align well</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets/cs180proj1/edge_as_feature/emir_edge.jpg" alt="Block Image 2">
+                    <p>Using edge as a new feature to perfectly align</p>
+                </div>
             </div>
-            <p>Proin a nisi ac mi facilisis sollicitudin ut ut lectus. Suspendisse potenti.</p>
         </div>
 
-        <!-- Add more blocks as needed -->
+        <h2>Bells and Whistles -- Automatic White Balancing</h2>
+        
+        
+        
+        
+        <div class="block">
+            <p>
+                Even though now images can perfectly align, the color still looks off. I have implemented an automatic white balancing function to 
+                adjust the color. I used the sad "world averages as grey" assumption, and my implementation is inspired by https://pippin.gimp.org/image-processing/chapter-automaticadjustments.html
+                The basic idea of the implementation is to normalize the color plates toward "grey value", which is roughly 128 in unit8 space. I performed a linear shift to the let the mean value of pixels toward This
+                grey value, and the magnitude for each individual pixel is proportional to the pixel value and how far the mean value of the whole image is away from the grey value.
+                The results are appended below. We can see after automatic white balancing the color looks more "real".
+            </p>
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\self_no_balance.jpg" alt="Block Image 1">
+                    <p>Without Auto White Balancing</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\self_with_balancingt.jpg" alt="Block Image 2">
+                    <p>With Auto White Balancing, colors look better</p>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\emir_no_balance.jpg" alt="Block Image 1">
+                    <p>Without Auto White Balancing</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\emir_with_balancing.jpg" alt="Block Image 2">
+                    <p>With Auto White Balancing, colors look better</p>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\sculp_no_balance.jpg" alt="Block Image 1">
+                    <p>Without Auto White Balancing</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\sculp_with_balancingt.jpg" alt="Block Image 2">
+                    <p>With Auto White Balancing, colors look better</p>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\harvest_no_balance.jpg" alt="Block Image 1">
+                    <p>Without Auto White Balancing</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets\cs180proj1\white balancing\harvest_with_balancingt.jpg" alt="Block Image 2">
+                    <p>With Auto White Balancing, colors look better</p>
+                </div>
+            </div>
+        </div>
+        
+        <h2>Bells and Whistles -- Automatic Contrasting</h2>
+        <div class="block">
+            <p>
+                After white balancing, the color looks a lot better. However, for some images it seems a little bit too "bright". I have tried to finetune the brightness, but it did not work.
+                Instead, I implemented automatic contrasting to finetune the contrast of images, so that the color looks more vivid. The way I implemented automatic contrasting is by using the 
+                cv2 equliaze histogram function. It helps to spread the pixel values better on the range. 
+            </p>
+            
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets\cs180proj1\contrast\harvest_with_balancingt.jpg" alt="Block Image 1">
+                    <p>Without automatic contrasting</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets\cs180proj1\contrast\harvesters.jpg" alt="Block Image 2">
+                    <p>With automatic contrasting</p>
+                </div>
+            </div>
+        </div>
+        <div class="block">
+            <div class="block-images-container">
+                <div class="block-images">
+                    <img src="assets\cs180proj1\contrast\sculp_with_balancingt.jpg" alt="Block Image 1">
+                    <p>Without automatic contrasting</p>
+                </div>
+                <div class="arrow"><img src="assets\cs180proj1\arrow.svg" alt="Arrow pointing right"></div>
+                <div class="block-images">
+                    <img src="assets\cs180proj1\contrast\sculptures.jpg" alt="Block Image 2">
+                    <p>With automatic contrasting</p>
+                </div>
+            </div>
+        </div>
+        <p>Disclaimer: Some image are cropped manually. I did not implement automatic cropping. However, all methods mentioned in the above Bells and Whistles are implemented as automatic functions, according to project requirements.</p>
     </section>
 
     <footer>
-        <p>© 2024 Chengkun Cao. All rights reserved.</p>
+        <p>© 2024 Chengkun Alex Cao.</p>
     </footer>
 </body>
 </html>

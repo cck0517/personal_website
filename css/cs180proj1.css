@@ -1,0 +1,130 @@
+/* Basic Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body and General Layout */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+    background-color: #f4f4f9;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+header h1 {
+    font-size: 2em;
+    color: #333;
+}
+
+/* Image Showcase Section */
+.image-showcase {
+    margin-bottom: 40px;
+}
+
+.image-showcase h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.image-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+}
+
+.image-grid img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Content Block Section */
+.content-block h2 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.block {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.block p {
+    margin-bottom: 15px;
+}
+
+/* .block-images {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.block-images img {
+    width: 100%;
+    max-width: 48%;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+} */
+
+/* Footer */
+footer {
+    text-align: center;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+/* Container for the block images */
+.block-images-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    margin-bottom: 20px;
+}
+
+
+/* Individual block images styling */
+.block-images {
+    text-align: center;
+    max-width: 45%;
+}
+
+.block-images img {
+    width: 100%;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.block-images p {
+    margin-top: 5px;
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* Styling for the arrow */
+.arrow {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 10px;
+}
+
+.arrow img {
+    width: 50px; 
+    height: auto;
+}
