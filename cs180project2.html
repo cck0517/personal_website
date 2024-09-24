@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Project showcasing image processing results including gradient magnitude computation, unsharp masking, hybrid images, and multiresolution blending.">
+    <title>Image Processing Project Results</title>
+    <link rel="stylesheet" href="css\cs180proj2.css">
+</head>
+<body>
+    <header>
+        <h1>Image Processing Project Results</h1>
+        <nav>
+            <a href="#fun-with-filters">Gradient Magnitude</a>
+            <a href="#unsharp-masking">Unsharp Masking</a>
+            <a href="#hybrid-images">Hybrid Images</a>
+            <a href="#multires-blending">Multiresolution Blending</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="fun-with-filters">
+            <h2>Gradient Magnitude Computation</h2>
+            
+            <!-- Part 1.1 -->
+            <div class="part-1-1">
+                <h3>Part 1.1</h3>
+                <div class="text-content">
+                    <p>To calculate gradient magnitude, first convolve the original image with finite difference
+                        operators D_x and D_y. In below, partial_x = image * D_x and partial_y = image * D_y, where 
+                        * represents convolving. To get gradient magintude from the partial derivatives, simply
+                        take the square root of the sum of the squares of partial_x and squares of partial_y(sqrt(partial_x^2+partial_y^2))
+                        the result gradient magintude is then binarized using a threshold of 0.3 to get rid of noises.
+                    </p>
+                </div>
+                <div class="image-grid">
+                    <div class="dx-dy">
+                        <img src="assets\cs180proj2\diff_op.png" alt="D Operator" class="small-img">
+                    </div>
+                    <div class="original-image">
+                        <img src="assets\cs180proj2\cameraman.png" alt="Original Image" class="small-img">
+                    </div>
+                </div>
+            </div>
+        
+            <div class="result-images">
+                <div class="result-item">
+                    <img src="assets\cs180proj2\partial_x 11.png" alt="Result 1" class="result-img">
+                    <p>partial x image</p>
+                </div>
+                <div class="result-item">
+                    <img src="assets\cs180proj2\partial_y 11.png" alt="Result 2" class="result-img">
+                    <p>partial y image</p>
+                </div>
+                <div class="result-item">
+                    <img src="assets\cs180proj2\grad_mag 11.png" alt="Result 3" class="result-img">
+                    <p>gradient magnitude</p>
+                </div>
+                <div class="result-item">
+                    <img src="assets\cs180proj2\binarized 11.png" alt="Result 4" class="result-img">
+                    <p>binarized gradient magnitude with threshold 0.3</p>
+                </div>
+            </div>
+        
+            <!-- Part 1.2 -->
+            <div class="part-1-2">
+                <h3>Part 1.2</h3>
+                <p>The result in previous part is a little bit noisy. To tackle this, first apply a gaussian blur (size 11, sigma 1.0) to the image, and then perform the same steps above.</p>
+                
+                <div class="images-content">
+                    <img src="assets\cs180proj2\cameraman.png" alt="Image 5" class="result-img">
+                    <p>original image</p>
+                    <img src="assets\cs180proj2\gaussian blurred cameraman.png" alt="Image 6" class="result-img">
+                    <p>gaussian blurred</p>
+                </div>
+                
+                <p>After applying gaussian filter, the same steps as above are used:</p>
+                <div class="result-images">
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\G then dx.png" alt="Result 7" class="result-img">
+                        <p>partial x image</p>
+                    </div>
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\G then dy.png" alt="Result 8" class="result-img">
+                        <p>partial y image</p>
+                    </div>
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\grad_mag for G.png" alt="Result 9" class="result-img">
+                        <p>gradient magnitude</p>
+                    </div>
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\threshold 01.png" alt="Result 10" class="result-img">
+                        <p>binarized gradient magnitude with threshold 0.1</p>
+                    </div>
+                </div>
+                <p>Notice that after the same procedure, but with the image applied gaussian filter first, we have a smoother edge, and the result is also a lot less noisy.</p>
+                <h3>Using a single convolution</h3>
+                <p>Because convolution is both commutative and associative, we can first convolve the finite difference filters D_y and D_x repectively with Gaussian filter first, then apply the filters to the original image to get exact same result</p>
+                <div class="result-images">
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\DogX.png" alt="Result 7" class="result-img">
+                        <p>partial x derivative for gaussian filter</p>
+                    </div>
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\Dogy.png" alt="Result 8" class="result-img">
+                        <p>partial y derivative for gaussian filter</p>
+                    </div>
+                    <div class="result-item">
+                        <img src="assets\cs180proj2\threshold 01.png" alt="Result 10" class="result-img">
+                        <p>binarized gradient magnitude with threshold 0.1</p>
+                    </div>
+                </div>
+                <p>The result of binarized gradient magnitude is exactly the same as calculated above, thus proving the associative/commutative property of convolution</p>
+            </div>
+        </section>
+
+        <section id="unsharp-masking">
+            <h2>Unsharp Masking</h2>
+            
+            <!-- Description -->
+            <p>To sharpen an image, I created a unsharp mask filter, which is a single filter that
+                finds the difference between original image and gaussian filtered image, then add alpha
+            times that difference to the original image. Note that
+        the alpha is a parameter that controls how much "high frequency" being added to the picture. 
+        So the higher alpha is , the more sharpened the image is.
+        Below are few of the results. In first two rows I applied different alphas to sharpen a given image and another 
+        camel image I found online. In third row, I found a clear image, applied gaussian blur, and then performed sharpening.
+     </p>
+            
+            <!-- Row 1 (two images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\taj.png" alt="Image 1">
+                    <p>srigianl Taj image</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\sharp_taj.png" alt="Image 2">
+                    <p>sharpened Taj with alpha = 1</p>
+                </div>
+            </div>
+            
+            <!-- Row 2 (two images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\camel.png" alt="Image 3">
+                    <p>low res camel</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\camel_sharp.png" alt="Image 4">
+                    <p>shaprened camel with alpha = 2</p>
+                </div>
+            </div>
+            
+            <!-- Row 3 (three images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\clear.png" alt="Image 5">
+                    <p>original clear image</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\blurred.png" alt="Image 6">
+                    <p>blurred after applying gaussian filter</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\sharpened.png" alt="Image 7">
+                    <p>sharpened using alpha = 5</p>
+                </div>
+            </div>
+
+            <p>When comparing the result of original image and the sharpened image after blurring,
+                it is obvious that the resharpened image loses lots of the details. Yet from a distance,
+                the sharpened image seems quite more clear then the blurred image! This proves that stronger high frequencies
+                does not actually make the image look more "clear", but instead make it look more sharp, and then
+            perceived to be "clearer".         </p>
+        </section>
+
+        <section id="hybrid-images">
+            <h2>Hybrid Images & Fourier Analysis</h2>
+        
+            <!-- Starting paragraph -->
+            <p>This section showcases hybrid images made by blending the high frequency portion of one image
+                with the low-freqency portion of another image so that the image looks like one image in close distance,
+                but like another when looked from far away. Below
+            </p>
+        
+            <!-- Row 1 (four images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\DerekPicture.jpg" alt="Image 1">
+                    <p>Derek</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\nutmeg.jpg" alt="Image 2">
+                    <p>Nutmeg</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\dn_both_color.png" alt="Image 3">
+                    <p>Hybrid</p>
+                </div>
+                <!-- <div class="image-container">
+                    <img src="image4.jpg" alt="Image 4">
+                    <p>Image 4</p>
+                </div> -->
+            </div>
+            
+            <h3>Bells and Whistles</h3>
+            <!-- Second paragraph -->
+            <p>Below is a result of hybrid pictures with both man and cat without color, only cat with color, only man with color, and both with color.</p>
+           
+            <!-- Row 2 (four images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\both_no_color.png" alt="Image 5">
+                    <p>both without color</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\cat with color.png" alt="Image 6">
+                    <p>only cat with color</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\man with color.png" alt="Image 7">
+                    <p>only man with color</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\dn_both_color.png" alt="Image 8">
+                    <p>both with color</p>
+                </div>
+            </div>
+
+            <p>According to above, both image with color seem to generate the best result. Below are few more examples generated using self selected images.</p>
+            <!-- Row 5 (four images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\cr7.jpg" alt="Image 18">
+                    <p>CR7</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\messi.jpg" alt="Image 19">
+                    <p>Messi</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\messi7.png" alt="Image 20">
+                    <p>hybrid result</p>
+                </div>
+                <div class="image-container half-size">
+                    <img src="assets\cs180proj2\messi7.png" alt="Image 21">
+                    <p>from far</p>
+                </div>
+            </div>
+            
+            <!-- Row 3 (four images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\goh.jpg" alt="Image 9">
+                    <p>Vincent Van Gogh self portrait </p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\earring.jpg" alt="Image 10">
+                    <p>Girl with a Pearl Earring</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\van_woman.png" alt="Image 11">
+                    <p>hybrid image</p>
+                </div>
+                <div class="image-container half-size">
+                    <img src="assets\cs180proj2\van_woman.png" alt="Image 12">
+                    <p>from far</p>
+                </div>
+            </div>
+        
+            <!-- Third paragraph -->
+            <p>Below is the frequency analysis for the above hybrid process, each graph is the log magnitude for the Fourier transform.</p>
+        
+            <!-- Row 4 (five images) -->
+            <div class="row five-images">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\fft of im1.png" alt="Image 13">
+                    <p>girl with earring</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\fft of im2.png" alt="Image 14">
+                    <p>Van Gogh</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\fft of low pass filtered.png" alt="Image 15">
+                    <p>Van Gogh low frequencies</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\fft of high pass filtered.png" alt="Image 16">
+                    <p>girl high frequencies</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\fft of hybrid.png" alt="Image 17">
+                    <p>hybrid image</p>
+                </div>
+            </div>
+            
+
+            <p>Below is an example that failed, the reason behind this failure is probably because the high frequency of one image is too hard to be distinguished from
+                the low frequency of another image. (Altough this would be pretty cool if it worked!)
+            </p>
+            <!-- Row 5 (four images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\cck1.jpg" alt="Image 18">
+                    <p>me</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\cck2.jpg" alt="Image 19">
+                    <p>me</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\failure.png" alt="Image 20">
+                    <p>hybrid result</p>
+                </div>
+                <div class="image-container half-size">
+                    <img src="assets\cs180proj2\failure.png" alt="Image 21">
+                    <p>from far</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="multires-blending">
+            <h2>Multiresolution Blending</h2>
+        
+            <!-- Starting paragraph -->
+            <p>In this section, I will implement image blending using Gaussian and Laplacian stack, below is a simple visualization of laplacian stack. (normalized for better visualization)
+                Note that the left are the highest frequencies, and the right is the lowest frequencies, and the last image in the stack is the last image in gaussian stack.
+            </p>
+        
+            <!-- Row 1 (two images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\orple.jpg" alt="Image 1">
+                    <p>Oraple from 1983 paper by Burt and Adelson</p>
+                </div>
+            </div>
+        
+            <!-- Column of three wide images -->
+            <div class="vertical-row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\app_lap.png" alt="Wide Image 1">
+                    <p>Laplacian stack for apple half</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\ora_lap.png" alt="Wide Image 2">
+                    <p>Laplacian stack for orange half</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\oraple_lap.png" alt="Wide Image 3">
+                    <p>Laplacian stack for oraple</p>
+                </div>
+            </div>
+        
+            <!-- Second paragraph -->
+            <p>With the Laplacian stack available, we can proceed to reproduce the famous oraple by blending the images in different Laplacian level using a gaussian stack of masks ,
+                and then collapse the blended Laplacian stack to get back the image. Below is the result of blending the famous Apple and Orange.
+            </p>
+            
+            <div class="row two-images">
+                <div class="image-container">
+                    <img src="assets/cs180proj2/pple.jpeg" alt="Image 1">
+                    <p>original apple</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets/cs180proj2/orange.jpeg" alt="Image 2">
+                    <p>original orange</p>
+                </div>
+            </div>
+
+            <!-- Single centered image -->
+            <div class="centered-image">
+                <img src="assets\cs180proj2\blended_oraple.png" alt="Centered Image">
+                <p>blended result using Laplacian stacks</p>
+            </div>
+        
+            <!-- Third paragraph -->
+            <p>Below are a few more results using irregular masks. The mask are generated using threshold values on a given image (the images have a white background, which are easy to distinguish simply using a threshold value)</p>
+        
+            <!-- Row 2 (three images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\oppen.jpg" alt="Image 3">
+                    <p>Oppenheimer</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\barbie.jpg" alt="Image 4">
+                    <p>Barbie world</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\oppen_in_barbie.png" alt="Image 5">
+                    <p>Oppenheimer in Barbie world</p>
+                </div>
+            </div>
+        
+            <!-- Row 3 (three images) -->
+            <div class="row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\giffafe.jpg" alt="Image 6">
+                    <p>a giraffe</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\nyc.jpg" alt="Image 7">
+                    <p>NYC</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\g_and_nyc.png" alt="Image 8">
+                    <p>giraffe in NYC</p>
+                </div>
+            </div>
+            
+            <p> Laplacian stacks for giraffe and NYC </p>
+            <!-- Column of three wide images -->
+            <div class="vertical-row">
+                <div class="image-container">
+                    <img src="assets\cs180proj2\g_lap.png" alt="Wide Image 4">
+                    <p>giraffe</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\nyc_lap.png" alt="Wide Image 5">
+                    <p>NYC</p>
+                </div>
+                <div class="image-container">
+                    <img src="assets\cs180proj2\g_and_nyc_lap.png" alt="Wide Image 6">
+                    <p>giraffe and NYC blended</p>
+                </div>
+            </div>
+            <h3>Bells and Whistles</h3>
+            <p>For this part, I direcly used the colored images to enhance effect. </p>
+            <h3>Reflection</h3>
+            <p>Overall this is a very fun project. The tasks are intensive, but I feel greatly satisfied once I finished them. I learned a few things from the project. Firstly, there is a lot of
+                "tricks" we can do to fool human eyes because our perception of images may differ from what they really appear to be. For example, during image sharpening, without adding any more
+                information, but simply making the high frequencies stronger, we can make a picture seem more "clear" to human eye. This is very suprising to me. Another thing that I learnt is when managing
+                complicated codes, I need to test my code more often. When I was implemented image blending function, I forgot to mask the last gaussian image in the Laplacian stack. This worked fine for 
+                the oraple (probably because it is blurry and dim) but resulted terrible outcome for other images. I spent quite a long time trying different configurations but none of them worked. If I tested my 
+                image_blend function more thoroughly, I would have saved much time.
+            </p>
+        </section>
+    </main>
+
+    <footer>
+        <p>Project by Alex Cao &copy; 2024</p>
+    </footer>
+</body>
+</html>
