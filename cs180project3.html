@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Vision Project</title>
+    <link rel="stylesheet" href="css\cs180proj3.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#introduction">Introduction</a></li>
+                <li><a href="#part1">Defining Correspondences</a></li>
+                <li><a href="#part2">The "Mid-way Face"</a></li>
+                <li><a href="#part3">The Morph Sequence</a></li>
+                <li><a href="#part4">The Mean Face of A population</a></li>
+                <li><a href="#part5">Caricatures: Extrapolating from the mean</a></li>
+                <li><a href="#part6">Bells and Whistles: change of gender and PCA</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <h1>Face Morphing</h1>
+            <h2>Chengkun (Alex) Cao</h2>
+            <p>Face Morphing and Modeling a photo collection</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main>
+        <section id="introduction">
+            <div class="container">
+                <h2>Introduction</h2>
+                <p>
+                   
+In this project, I explored facial morphing techniques to transform one face into another, compute the average face of a population, and create caricatures by extrapolating from the mean. These techniques have practical applications in computer graphics, animation, and facial recognition, allowing for smooth transitions between faces and deeper analysis of facial features.
+                </p>
+            </div>
+        </section>
+
+        <section id="part1">
+            <div class="container part1-layout">
+                <h2>Part 1: Defining Correspondences</h2>
+                <p>To perform face morphing from me to my friend Lily, I need to first align the two images by labeling
+                    the corresponding points. I cropped the images and resized them to be exact same size, and used <a href="https://cal-cs180.github.io/fa23/hw/proj3/tool.html">this</a> online tool
+                    to label the points. I then calculated the Delunay triangulation of the points using the average of two sets of points.
+                </p>
+                <div class="part1-images">
+                    <figure>
+                        <img src="assets\cs180proj3\me_tri.png" alt="Image 1">
+                        <figcaption>Me with Delunay Triangulation</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets\cs180proj3\lily_tri.png" alt="Image 2">
+                        <figcaption>Lily with Delunay Triangulation</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+        
+
+        <section id="part2">
+            <div class="container part2-layout">
+                <h2>Part 2: The "Mid-way Face"</h2>
+                <p>To compute the mid-way face:</p>
+                <ul>
+                    <li>1. Compute the average shape by taking the average of corresponding points between the two images.</li>
+                    <li>2. For each triangle in the average shape, compute the inverse affine transformation between the original triangle and the mean triangle.
+                        Using polygon from scikit image to select the relevant points, inverse warp to find out the relevant pixels in the original image (use 
+                        bilinear interpolation)
+                    </li>
+                    <li>3. Cross dissolve to find the average color between two triangles.</li>
+                </ul>
+                <div class="part2-images">
+                    <figure>
+                        <img src="assets\cs180proj3\me.png" alt="Image 1">
+                        <figcaption>Me</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets\cs180proj3\midway.png" alt="Image 2">
+                        <figcaption>Me-Lily Midway</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets\cs180proj3\lily.png" alt="Image 3">
+                        <figcaption>Lily</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+        
+
+        <section id="part3">
+            <div class="container part3-layout">
+                <div class="part3-description">
+                    <h2>Part 3: The Morph Sequence</h2>
+                    <p> Using the same method as last part, I created a morph function that takes two fraction parameters
+                        warp_frac and dissolve_frac, which respectively control the amount of warping and cross dissolving. Both
+                        parameters lies within [0,1]. Using a list of different parameters, with 0 being the original start image and 1
+                        being the target image, I generated 45 frames of a morph sequence, and saved them as a gif.
+                    </p>
+                </div>
+                <div class="part3-image">
+                    <img src="assets\cs180proj3\me_to_lily_original_colored.gif" alt="Morph Sequence GIF">
+                </div>
+            </div>
+        </section>
+        
+
+        <section id="part4">
+            <div class="container part4-layout">
+                <h2>Part 4: The Mean Face of A Population</h2>
+                
+                <!-- Paragraph and Two Images (Average Shapes) -->
+                <p>In this part, I used the FEI dataset (https://fei.edu.br/~cet/facedatabase.html) to compute the average face shape of the population. The FEI contains two subsets of the population:
+                    one with expression and one without expression. Below are the average appearance (without morphing) and the average shape of the dataset (for no expression subpopulation).</p>
+                <div class="part4-avg-faces">
+                    <figure>
+                        <img src="assets\cs180proj3\average appearance.png" alt="Average Face appearance (without morphing)">
+                        <figcaption>Average appearance (without morphing)</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets\cs180proj3\average_shape.png" alt="Average Face With Expression">
+                        <figcaption>Average shape</figcaption>
+                    </figure>
+                </div>
+        
+                <!-- Paragraph and Three Morphed Pairs (Original and Morphed) -->
+                <p>Next, I morphed all faces from the dataset into the average shape calculated. Here are some examples of faces morphed into the average shape, with the original on the left and the morphed result on the right.</p>
+                <div class="part4-morphed-pairs">
+                    <div class="morphed-pair">
+                        <figure>
+                            <img src="assets\cs180proj3\109a.jpg" alt="Original Face 3">
+                            <figcaption>Original Face 1</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="assets\cs180proj3\109apre.jpg" alt="Morphed Face 3">
+                            <figcaption>Morphed Into Average Shape</figcaption>
+                        </figure>
+                    </div>
+                    <div class="morphed-pair">
+                        <figure>
+                            <img src="assets\cs180proj3\121a.jpg" alt="Original Face 2">
+                            <figcaption>Original Face 2</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="assets\cs180proj3\example121pre.jpg" alt="Morphed Face 2">
+                            <figcaption>Morphed Into Average Shape</figcaption>
+                        </figure>
+                    </div>
+                    <div class="morphed-pair">
+                        <figure>
+                            <img src="assets\cs180proj3\89a.jpg" alt="Original Face 1">
+                            <figcaption>Original Face 3</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="assets\cs180proj3\example89pre.jpg" alt="Morphed Face 1">
+                            <figcaption>Morphed Into Average Shape</figcaption>
+                        </figure>
+                    </div>
+                </div>
+                <!-- Mean Face Computation -->
+                <div class="part4-mean-face">
+                    <div class="mean-face-description">
+                        <p>I computed the mean face for the dataset without expression by taking the average of all images warped into the average shape.</p>
+                    </div>
+                    <figure class="mean-face-image">
+                        <img src="assets\cs180proj3\mean_face.png" alt="Mean Face Without Expression">
+                        <figcaption>Mean Face (With Morphing)</figcaption>
+                    </figure>
+                </div>
+
+    
+                <p>Below is my face morphed into the average face geometry without expression, as well as the average face warped into my geometry.</p>
+                <div class="part4-personal-warp">
+                    <figure>
+                        <img src="assets\cs180proj3\me_to_avg.png" alt="My Face Warped Into Average Geometry">
+                        <figcaption>My Face Warped Into Average Geometry</figcaption>
+                    </figure>
+                    <figure>
+                        <img src="assets\cs180proj3\avg_to_me.png" alt="Average Face Warped Into My Geometry">
+                        <figcaption>Average Face Warped Into My Geometry</figcaption>
+                    </figure>
+                </div>
+            </div>
+        </section>
+
+        <section id="part5">
+            <div class="container part5-layout">
+                <h2>Part 5: Caricatures: Extrapolating from the Mean</h2>
+                
+                <p>In this part, I created caricatures by extrapolating from the mean no-expression face from the previous part. I used different alphas, with negative alphas (less than -1) aiming to exaggerate characteristics from the no-expression dataset. Specifically, I aimed to "decrease expression" from my face, and we can see that my smile was indeed reduced when alpha is less than -1.</p>
+                
+                <div class="part5-wide-image">
+                    <img src="assets\cs180proj3\caricatures.png" alt="Caricature Results with Different Alphas">
+                </div>
+            </div>
+        </section>
+        
+
+        <section id="part6">
+            <div class="container part6-layout">
+                <h2>Part 6: Bells and Whistles</h2>
+                
+                <!-- Subpart 1: Change of Gender -->
+                <div class="subpart-gender">
+                    <h3>Change of Gender (BW1)</h3>
+                    <p>In this part, I attempted to change the gender of my friend Lily. I used the average Chinese male face from <a href="https://pmsol3.wordpress.com/2009/10/10/world-of-facial-averages-east-southeast-asia-pacific-islander/">here</a>. 
+                        I have tried to blend only the shape, only the appearance, and both shape and appearance. For blending both the shape and appearances, I played around with
+                        several different parameters contolling how much shape and appearance should be mixed. It turns out result seem better when I use slightly more shape from average
+                        chinese male and a little bit more appearance from lily. Below are the results, "both 3" seem to the best one. (warp frac 0.7, dissolve frac 0.5)</p>
+                    <div class="gender-images">
+                        <figure>
+                            <img src="assets\cs180proj3\lily.png" alt="Original Image">
+                            <figcaption>Lily</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="assets\cs180proj3\chineseaverageman.jpg" alt="Gender-changed Image">
+                            <figcaption>Average Chinese Male</figcaption>
+                        </figure>
+                    </div>
+                    <div class="gender-wide">
+                        <figure>
+                            <img src="assets\cs180proj3\change_gender.png" alt="Wide View of Gender Change Process">
+                            <figcaption>Gender Change</figcaption>
+                        </figure>
+                    </div>
+                </div>
+        
+                <!-- Subpart 2: PCA Basis and Eigenfaces -->
+                <div class="subpart-pca">
+                    <h3>PCA Basis and Eigenfaces (BW2)</h3>
+                    <p>In this part, I applied Principal Component Analysis (PCA) to derive the key eigenfaces. I then used the eigenfaces and a randomly initialized set of weights to
+                        reconstruct a random new face from the basis. Inspired by <a href="https://inst.eecs.berkeley.edu/~cs180/fa23/upload/files/proj3/irenegeng2/">this</a>.
+                    </p>
+                    <div class="pca-images">
+                        <figure>
+                            <img src="assets\cs180proj3\eigen_face_exp.png" alt="Reconstructed Image Using PCA">
+                            <figcaption>Eigenfaces</figcaption>
+                        </figure>
+                        <figure>
+                            <img src="assets\cs180proj3\eigen_face_no_exp.png" alt="Original Image for PCA">
+                            <figcaption>Eigenfaces</figcaption>
+                        </figure>
+                    </div>
+                    <div class="pca-wide">
+                        <figure>
+                            <img src="assets\cs180proj3\random face.png" alt="PCA Eigenfaces Visualization">
+                            <figcaption>New random faces generated from the basis</figcaption>
+                        </figure>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>2024 Chengkun(Alex) Cao</p>
+        </div>
+    </footer>
+</body>
+</html>
+

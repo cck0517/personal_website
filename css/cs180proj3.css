@@ -1,0 +1,478 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
+    padding: 20px;
+}
+
+/* Navigation Bar */
+nav {
+    background-color: #333;
+    color: white;
+    padding: 15px 0;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    position: static; /* Changed from sticky to static */
+    z-index: 1000;
+}
+
+nav ul {
+    list-style: none;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+}
+
+nav ul li {
+    margin: 0 10px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 10px 15px;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+    display: inline-block;
+}
+
+nav ul li a:hover {
+    background-color: #555;
+    transform: translateY(-2px);
+}
+
+nav ul li a.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* Centered Content */
+.container {
+    max-width: 900px; /* Restrict width to make content more focused */
+    margin: 0 auto; /* Center content horizontally */
+    padding: 0 20px; /* Add some padding to the sides */
+}
+
+/* Header */
+header {
+    background: #333;
+    color: #fff;
+    padding: 30px 0;
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+header h1 {
+    margin-bottom: 10px;
+    font-size: 2.8rem;
+    font-weight: bold;
+    letter-spacing: 2px;
+}
+
+header h2 {
+    font-size: 1.5rem;
+    color: #ccc;
+    font-weight: normal;
+    margin-bottom: 10px;
+}
+
+header p {
+    font-size: 1.1rem;
+    color: #bbb;
+}
+
+/* Main Content */
+main {
+    padding: 20px 0;
+}
+
+main h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+}
+
+main p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify; /* Makes paragraphs more visually aligned */
+}
+
+main img {
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+section {
+    margin-bottom: 60px; /* Add more space between sections */
+}
+
+/* Footer */
+footer {
+    background: #333;
+    color: #fff;
+    text-align: center;
+    padding: 15px 0;
+    margin-top: 40px;
+}
+
+footer p {
+    font-size: 0.9rem;
+}
+
+/* Part 1 Specific Layout */
+.part1-layout {
+    margin-bottom: 60px; /* Add space after this section */
+}
+
+.part1-images {
+    display: flex;
+    justify-content: space-between; /* Evenly space out the images */
+    margin-top: 20px; /* Add spacing between the paragraph and images */
+}
+
+.part1-images figure {
+    width: 48%;
+    text-align: center; /* Center the captions under the images */
+}
+
+.part1-images img {
+    width: 100%; /* Each image takes full width of its container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.part1-images figcaption {
+    font-size: 0.9rem; /* Smaller font for captions */
+    color: #555; /* Slightly lighter color for description text */
+    margin-top: 10px; /* Add space between the image and the caption */
+}
+
+/* Part 2 Specific Layout */
+.part2-layout {
+    margin-bottom: 60px; /* Add space after this section */
+}
+
+.part2-images {
+    display: flex;
+    justify-content: space-between; /* Evenly space out the three images */
+    margin-top: 20px; /* Add spacing between the paragraph and images */
+}
+
+.part2-images figure {
+    width: 30%; /* Each image takes up 30% of the container's width */
+    text-align: center; /* Center the captions under the images */
+}
+
+.part2-images img {
+    width: 100%; /* Each image fills the width of its container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.part2-images figcaption {
+    font-size: 0.9rem; /* Smaller font for the descriptions */
+    color: #555; /* Slightly lighter color for caption text */
+    margin-top: 10px; /* Space between image and caption */
+}
+/* Part 2 Specific Layout - Bullet Points */
+.part2-layout ul {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding-left: 20px;
+}
+
+.part2-layout li {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.5;
+    margin-bottom: 10px;
+}
+
+
+/* Part 3 Specific Layout */
+.part3-layout {
+    display: flex;
+    justify-content: space-between; /* Align the description and GIF side by side */
+    align-items: center; /* Vertically align the content */
+    margin-bottom: 60px; /* Add space after this section */
+}
+
+.part3-description {
+    width: 45%; /* Paragraph takes 45% of the container's width */
+}
+
+.part3-description h2 {
+    font-size: 2.2rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.part3-description p {
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.part3-image {
+    width: 50%; /* GIF takes 50% of the container's width */
+    text-align: center; /* Center the GIF horizontally */
+}
+
+.part3-image img {
+    width: 100%; /* Make the GIF fill its container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+.part3-description p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.5;
+    text-align: justify;
+    margin-bottom: 10px;
+}
+
+/* Part 4 Specific Layout */
+.part4-layout {
+    margin-bottom: 60px; /* Add space after this section */
+}
+
+/* Two average face images */
+.part4-avg-faces {
+    display: flex;
+    justify-content: space-between; /* Align the images evenly in a row */
+    margin-top: 20px;
+}
+
+.part4-avg-faces figure {
+    width: 48%; /* Each image takes 48% of the container width */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.part4-avg-faces img {
+    width: 100%; /* Make the image take full width of its container */
+    height: auto; /* Maintain aspect ratio */
+}
+
+.part4-avg-faces figcaption {
+    margin-top: 10px; /* Space between image and caption */
+    text-align: center;
+}
+
+/* Styling for the morphed pairs of images (Original and Morphed) */
+.part4-morphed-pairs {
+    margin-top: 20px;
+}
+
+.morphed-pair {
+    display: flex;
+    justify-content: space-between; /* Align the two images in each pair side by side */
+    margin-bottom: 20px; /* Add space between pairs */
+}
+
+.morphed-pair figure {
+    width: 48%; /* Each image in the pair takes 48% of the container width */
+    text-align: center;
+}
+
+/* My face warped and average face warped */
+.part4-personal-warp {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Common styles for all images in Part 4 */
+.part4-avg-faces img,
+.part4-morphed-pairs img,
+.part4-personal-warp img {
+    width: 100%; /* Make the image take full width of its container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Common styles for all captions */
+.part4-avg-faces figcaption,
+.part4-morphed-pairs figcaption,
+.part4-personal-warp figcaption {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 10px;
+}
+
+.part4-mean-face {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+
+.mean-face-description {
+    width: 60%;
+    padding-right: 20px;
+}
+
+.mean-face-description p {
+    font-size: 1.1rem;
+    color: #555;
+    line-height: 1.6;
+}
+
+.mean-face-image {
+    width: 35%;
+}
+
+.mean-face-image img {
+    width: 100%;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.mean-face-image figcaption {
+    text-align: center;
+    margin-top: 10px;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* Part 5 Specific Layout */
+.part5-layout {
+    margin-bottom: 60px; /* Add space after this section */
+}
+
+.part5-layout p {
+    margin-bottom: 20px; /* Add space between the paragraph and the image */
+    font-size: 1.2rem;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify; /* Justify the text for clean paragraph alignment */
+}
+
+/* Styling for the wide image */
+.part5-wide-image img {
+    width: 100%; /* Make the image take up the full width of the container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Part 6 Specific Layout */
+.part6-layout {
+    margin-bottom: 60px; /* Add space after this section */
+}
+
+/* Subpart 1: Change of Gender */
+.subpart-gender {
+    margin-bottom: 40px; /* Space between the two subparts */
+}
+
+.subpart-gender h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.subpart-gender p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.gender-images {
+    display: flex;
+    justify-content: space-between; /* Align the two images side by side */
+    margin-bottom: 20px;
+}
+
+.gender-images figure {
+    width: 48%; /* Each image takes 48% of the container */
+    text-align: center;
+}
+
+.gender-images img {
+    width: 100%; /* Make the image fill its container */
+    height: 300px; /* Set a fixed height for both images */
+    object-fit: cover; /* Maintain aspect ratio and cover the container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+.gender-wide {
+    margin-top: 20px;
+}
+
+.gender-wide img {
+    width: 100%; /* Make the wide image fill the container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Subpart 2: PCA Basis and Eigenfaces */
+.subpart-pca h3 {
+    font-size: 1.8rem;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.subpart-pca p {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    color: #555;
+    line-height: 1.8;
+    text-align: justify;
+}
+
+.pca-images {
+    display: flex;
+    justify-content: space-between; /* Align the two images side by side */
+    margin-bottom: 20px;
+}
+
+.pca-images figure {
+    width: 48%; /* Each image takes 48% of the container */
+    text-align: center;
+}
+
+.pca-wide {
+    margin-top: 20px;
+}
+
+.pca-wide img {
+    width: 100%; /* Make the wide image fill the container */
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+/* Common styles for captions */
+.gender-images figcaption,
+.gender-wide figcaption,
+.pca-images figcaption,
+.pca-wide figcaption {
+    font-size: 0.9rem;
+    color: #555;
+    margin-top: 10px;
+    text-align: center; /* Center the figcaption text */
+}
+
+
