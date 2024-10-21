@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Mosaicing Project - CS180</title>
+    <link rel="stylesheet" href="css\cs180proj4.css">
+    <!-- Include MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Project 4</h1>
+            <p>CS180 - Fall 2024 Alex Cao</p>
+        </div>
+    </header>
+
+    <section class="introduction">
+        <div class="container">
+            <h2>Introduction</h2>
+            <p>In this project, I will start by trying to find homographies between images. These homographies are essential for understanding the geometric relationships between different views of a scene. Then, using these homographies, I will warp images to perform rectification and image stitching. Rectification will make the images appear rectified, while stitching will combine them into a seamless panorama. This process involves complex mathematical transformations and computer vision techniques to create a cohesive final image from multiple input photographs.</p>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Part 1: Pictures</h2>
+            <div class="subsection">
+                <p>In this part, I took several set of pictures from a single center of projection.</p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony1.jpg" alt="Image 1">
+                        <p class="caption">Image of balcony view captured from the left angle.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony2.jpg" alt="Image 2">
+                        <p class="caption">Image of balcony view captured from the right angle.</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\garage1.jpg" alt="Image 1">
+                        <p class="caption">Image of garage captured from the left angle.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\garage2.jpg" alt="Image 2">
+                        <p class="caption">Image of garage captured from the right angle.</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\apartment1.jpg" alt="Image 1">
+                        <p class="caption">Image of downstairs the Emery apartment captured from the left angle.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\apartment2.jpg" alt="Image 2">
+                        <p class="caption">Image of upstairs the Emery apartment captured from the right angle.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Part 2: Recover Homographies</h2>
+            <div class="subsection">
+                <p>The first step is to find Homographies transform between images. To find the transformation matrix, first we need to lable the correspondence points between images.
+                    In this project, I used <a href="https://cal-cs180.github.io/fa23/hw/proj3/tool.html" target="_blank">this online tool</a> to label the points.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony1_labeled.png" alt="Homography Image 1">
+                        <p class="caption">Point correspondences </p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony2_labeled.png" alt="Homography Image 2">
+                        <p class="caption">Point correspondences</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\garage1_labeled.png" alt="Homography Image 1">
+                        <p class="caption">Point correspondences</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\garage2_labeled.png" alt="Homography Image 2">
+                        <p class="caption">Point correspondences</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\apartment1_labeled.png" alt="Homography Image 1">
+                        <p class="caption">Point correspondences</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\apartment2_labeled.png" alt="Homography Image 2">
+                        <p class="caption">Point correspondences</p>
+                    </div>
+                </div>
+            </div>
+            <p>
+                To find the homography matrix, we can set up the following equation: (adapted from the slides)
+            </p>
+            <div class="math-equation" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                \[
+                \begin{bmatrix}
+                a & b & c \\
+                d & e & f \\
+                g & h & 1
+                \end{bmatrix}
+                \begin{bmatrix} x \\ y \\ 1 \end{bmatrix}
+                =
+                \begin{bmatrix} wx' \\ wy' \\ w \end{bmatrix}
+                \]
+            </div>
+            <p>
+                To solve this, we can expand the terms, and that would be:
+            </p>
+            <div class="math-equation" style="background-color: #f9f9f9; padding: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); overflow-x: auto;">
+                \[
+                \begin{align*}
+                &\begin{cases}
+                ax + by + c = wx' \\
+                dx + ey + f = wy' \\
+                gx + hy + 1 = w
+                \end{cases}
+                \\[10pt]
+                \implies
+                &\begin{cases}
+                ax + by + c = (gx + hy + 1) x' \\
+                dx + ey + f = (gx + hy + 1) y'
+                \end{cases}
+                \\[10pt]
+                \implies
+                &\begin{cases}
+                ax + by + c - gxx' - hyx' = x' \\
+                dx + ey + f - gxy' - hyy' = y'
+                \end{cases}
+                \\[10pt]
+                \implies
+                &\begin{bmatrix}
+                x & y & 1 & 0 & 0 & 0 & -xx' & -yx' \\
+                0 & 0 & 0 & x & y & 1 & -xy' & -yy'
+                \end{bmatrix}
+                \begin{bmatrix} a \\ b \\ c \\ d \\ e \\ f \\ g \\ h \end{bmatrix}
+                =
+                \begin{bmatrix} x' \\ y' \end{bmatrix}
+                \end{align*}
+                \]
+            </div>
+            <p>
+                We can then use least square to solve for the homography matrix.
+            </p>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Part 3: Image Warping</h2>
+            <div class="subsection">
+                <p>Once we have the homography matrix, we can use it to warp the images to a different space. This can be done using the inverse warping from last project. Specifically, once we have the homography matrix,
+                    we can first determine the output shape by transforming the corner points of the image. After we have the output shape, we can do inverse warping and fill in the values from the original image using bilinear interpolation.
+                    Below is one result of warping the balcony left view into the same space as the balcony right view.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony1.jpg" alt="Warp Image 1">
+                        <p class="caption">Original balcony left view before warping.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\warped_balc.png" alt="Warp Image 2">
+                        <p class="caption">Warped balcony left view into the same space as the balcony right view.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Part 4: Image Rectification</h2>
+            <div class="subsection">
+                <p>One fun thing we can do with homography is image rectification, where we can warp the images to some space so that it appears that we are looking directly from above.
+                    If we know something would look like a square when we are directly staring it, we can create a square ourself and warp the image into that square using homography.
+                    Below is an example of rectifying a picture of a painting.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\art_slant_ori.jpg" alt="Blend Image 1">
+                        <p class="caption">Before rectification.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\rectified_paint.png" alt="Blend Image 2">
+                        <p class="caption">After rectification.</p>
+                    </div>
+                </div>
+                <p>
+                    Here is another example, where a Van Gogh painting is rectified to a square. (It would be better warp this into a rectangle, but I am purposely making it a square to show how it would look in a square.)
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\start.jpg" alt="Blend Image 1">
+                        <p class="caption">Before rectification.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\rectified_van.png" alt="Blend Image 2">
+                        <p class="caption">After rectification.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Part 5: Image Stitching</h2>
+            <div class="subsection">
+                <p>Another fun thing homography can achieve is image stiching. When two pictures are taken from the same center of projection, we can use homography to transform the first image to the space of second image.
+                    To align the images, we first calculate the shift between image1 undergoes after homography transformation. Then, we apply the same shift to image2 to align the images. Note that the alignment is not perfect, because we
+                    calculated our homography transformation using least square, but this error is minor and not noticeable in stiching. 
+                </p>
+                <p>
+                   Simply aligning the image is not enough for a good stiching. We also need a way to smooth out the region where the images overlap. If we naively take the average of the two images, we can see a very clear edge at the overlap region.
+                   To fix this, I will be using two band blending, where I first calculate the L2 distance transform of the alpha masks (which pixels are used in the final result), I then use the normalized distance transform of two pictures to perform blending.
+                   Specifically, I first find the high frequency and low frequency components of the two images. For high frequency, the pixel where it's distance transform value is greater will be taken between the two images. For low frequency, the distance transform serves as weights
+                   for a weighted average of the two images.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony1.jpg" alt="Final Mosaic 1">
+                        <p class="caption">balcony left image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony2.jpg" alt="Final Mosaic 2">
+                        <p class="caption">balcony right image</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\dist_balc1.png" alt="Final Mosaic 1">
+                        <p class="caption">L2 distance transform of the alpha mask of the balcony left image.</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\dist_balc2.png" alt="Final Mosaic 2">
+                        <p class="caption">L2 distance transform of the alpha mask of the balcony right image.</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\low.png" alt="Final Mosaic 1">
+                        <p class="caption">low band blending</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\high.png" alt="Final Mosaic 2">
+                        <p class="caption">high band blending</p>
+                    </div>
+                </div>
+                <div class="image-row-single">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\blended_balc.png" alt="Stitched Balcony Image">
+                        <p class="caption">Final stitched balcony image</p>
+                    </div>
+                </div>
+                <p>
+                    Here are a few more examples, the distance transform and 2 band results are not shown for simplicity of the webpage.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\garage1.jpg" alt="Final Mosaic 1">
+                        <p class="caption">garage left image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\garage2.jpg" alt="Final Mosaic 2">
+                        <p class="caption">garage right image</p>
+                    </div>
+                </div>
+                <div class="image-row-single"></div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\blended_gar.png" alt="Stitched Balcony Image">
+                        <p class="caption">Final stitched garage image</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\apartment1.jpg" alt="Final Mosaic 1">
+                        <p class="caption">apartment left image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\apartment2.jpg" alt="Final Mosaic 2">
+                        <p class="caption">apartment right image</p>
+                    </div>
+                </div>
+                <div class="image-row-single">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\blended_aprt.png" alt="Stitched Balcony Image">
+                        <p class="caption">Final stitched apartment image</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Created by Chengkun Cao | CS180</p>
+        </div>
+    </footer>
+</body>
+</html>
