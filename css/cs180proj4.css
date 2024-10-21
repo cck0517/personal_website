@@ -94,3 +94,23 @@ footer {
 footer p {
     margin: 0;
 }
+
+
+.image-row-warped {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 20px; /* Add gap to create space between images */
+}
+.image-row-warped .image-container {
+    flex: 1;
+    width: 45%; /* Reduce width to make images smaller */
+}
+.image-row-warped .image-container img {
+    width: 100%;
+    height: auto;
+    object-fit: contain;
+    border-radius: 0;  /* Override border-radius */
+    max-width: 90%; /* Limit the maximum width of the image */
+    margin: 0 auto; /* Center the image within its container */
+}
