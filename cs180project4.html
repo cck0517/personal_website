@@ -307,7 +307,7 @@
         <div class="container">
             <h2>Section 2: Automatic Stitching</h2>
             <div class="subsection">
-                <p>Now that we have a way to stich images together, it is natural to explore ways to automatically do this task.
+                <p>Now that we have a way to stitch images together, it is natural to explore ways to automatically do this task.
                     In this section, I will explore and create a system for automatically stiching images into a mosaic. I will present
                     the system and algorithm step by step, and for most of the steps, I will be following the methods described in <a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf">"Multi-Image Matching using Multi-Scale Oriented Patches" by Brown et al.</a>
                 </p>
@@ -369,11 +369,11 @@
                 <div class="image-row">
                     <div class="image-container">
                         <img src="assets\cs180proj4\balcony2_50points.png" alt="Blend Image 1">
-                        <p class="caption">ANMS with K = 50 on balcony left image</p>
+                        <p class="caption">ANMS with K = 50 on balcony right image</p>
                     </div>
                     <div class="image-container">
                         <img src="assets\cs180proj4\balcony2_100points.png" alt="Blend Image 2">
-                        <p class="caption">ANMS with K = 100 on balcony left image</p>
+                        <p class="caption">ANMS with K = 100 on balcony right image</p>
                     </div>
                 </div>
 
@@ -409,7 +409,7 @@
                 <p>Now that we have the features, we need a way to match them. To do this, we can use nearest neighbor. 
                 First we calculate the distance between all pairs of features, then for each feature, we find its nearest neighbor and 
                 second nearest neighbor. We use the Lowe's trick (ratio between nearest and second nearest neighbor distance) to determine the best
-                matches. The smallest the ratio is (nearest neighbor is much closer than the second nearest), the better the match is. Additionally,
+                matches. The smaller the ratio is (nearest neighbor is much closer than the second nearest), the better the match is. Additionally,
                 we can also filter out some outliers if the matching distance is larger than the average of second nearest neighbor distance from all points.
                 Below is an example of feature matching performed on the balcony images.
                 <div class="image">
