@@ -303,10 +303,214 @@
         </div>
         
     </section>
+    <section class="introduction">
+        <div class="container">
+            <h2>Section 2: Automatic Stitching</h2>
+            <div class="subsection">
+                <p>Now that we have a way to stich images together, it is natural to explore ways to automatically do this task.
+                    In this section, I will explore and create a system for automatically stiching images into a mosaic. I will present
+                    the system and algorithm step by step, and for most of the steps, I will be following the methods described in <a href="https://inst.eecs.berkeley.edu/~cs180/fa24/hw/proj4/Papers/MOPS.pdf">"Multi-Image Matching using Multi-Scale Oriented Patches" by Brown et al.</a>
+                </p>
+            </div>
+        </div>
+    </section>
+    
+    <section class="part">
+        <div class="container">
+            <h2>Step 1: Detecting Corner Features</h2>
+            <div class="subsection">
+                <p>The first step is to find the interest points. To do this, I used a Harris corner detector to find 
+                    the Harris corners in the image. What this is basically doing is using the gradients and the second moment matrix
+                    to identify the "corners" in the image (place where siginificant change in all directions occur).
+                    Below is an example of detected Harris corners on the two balcony images. As we can see, simply calculating
+                    the Harris corners give us very dense points, which makes it highly inefficient to help us match features in later
+                    steps.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\harris_corners_balc1.png" alt="Blend Image 1">
+                        <p class="caption">Harris corners on balcony left image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\harris_corners_balc2.png" alt="Blend Image 2">
+                        <p class="caption">Harris corner on balcony right image</p>
+                    </div>
+                </div>
 
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Step 2: Adaptive Non-Maximal Suppression (ANMS)</h2>
+            <div class="subsection">
+                <p>Once we have the Harris corners, we need to find a way to select a smaller subset of all 
+                    the interest points. A smaller (and better) subset of interest point will improve the efficiency
+                    and accuracy for our algorithm. We want our points to 1. have large corner response, 2. evenly distributed
+                    in the image (not too clustered). In order to to this, we can use ANMS. The basic idea of ANMS is that
+                    each point is assigned a radius, defined to be the distance to the nearest stronger feature point. Mathematically,
+                    this is defined as \(r_i = \min_j |x_i - x_j|\) \(\forall x_j : h(x_i) < c_{robust} \cdot h(x_j)\), where \(r_i\) is the radius, \(x_i\) and \(x_j\) are 
+                    feature point locations, \(h()\) is the corner response, and \(c_{robust}\) determines how much is "stronger" considered.
+                    Once we have all the radii, we can simply select the top K points with the largest radii. This will give us a very
+                    nice and evenly distributed set of interest points. Below is an example of applying ANMS with \(c_{robust} = 0.9\)
+                    on the balcony images for K = 100 and K = 50.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\anms_50_points.png" alt="Blend Image 1">
+                        <p class="caption">ANMS with K = 50 on balcony left image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\anms_100_points.png" alt="Blend Image 2">
+                        <p class="caption">ANMS with K = 100 on balcony left image</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony2_50points.png" alt="Blend Image 1">
+                        <p class="caption">ANMS with K = 50 on balcony left image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\balcony2_100points.png" alt="Blend Image 2">
+                        <p class="caption">ANMS with K = 100 on balcony left image</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="part"></section>
+        <div class="container">
+            <h2>Step 3: Extracing Feature Descriptors</h2>
+            <div class="subsection">
+                <p> Now we have a good subset of the interest points, we need to extract feature descriptor using the interest points.
+                    To avoid aliasing,we first sample larger parches with radius 20 around the interest points (40*40 patches), we then sample with spacing s = 5 at a lower
+                    frequency than the one at which the interest points are located. For this part I used axis-aligned features and only one guassian level, and the features
+                    are also normalized afterwards. Below is an example of 50 features extracted from the balcony left image.
+                </p>
+                <div class="image">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\extracted_features_balc1.png" alt="Blend Image 1">
+                        <p class="caption">Feature extracted from balcony left image (Not normalized for better visualization)</p>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Step 4: Feature Matching</h2>
+            <div class="subsection">
+                <p>Now that we have the features, we need a way to match them. To do this, we can use nearest neighbor. 
+                First we calculate the distance between all pairs of features, then for each feature, we find its nearest neighbor and 
+                second nearest neighbor. We use the Lowe's trick (ratio between nearest and second nearest neighbor distance) to determine the best
+                matches. The smallest the ratio is (nearest neighbor is much closer than the second nearest), the better the match is. Additionally,
+                we can also filter out some outliers if the matching distance is larger than the average of second nearest neighbor distance from all points.
+                Below is an example of feature matching performed on the balcony images.
+                <div class="image">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\feature_matches.png" alt="Blend Image 1">
+                        <p class="caption">Feature matching between balcony left and right images (corresponding points are connected)</p>
+                    </div>
+                    
+                </div>
+
+            </div>
+        </div>
+    </section>
+    <section class="part">
+        <div class="container">
+            <h2>Step 5: RANSAC </h2>
+            <div class="subsection">
+                <p>RANSAC stands for Random Sample Consensus. It is a robust way to estimate homography. RANSAC is used to further filter
+                    out outliers/inconsitency in the matches found in the previous step. To perform RANSAC, we randomly sample 4 pairs of points,
+                    calculate the exact homography transformation, and apply this transformation to every other pairs to see if they matches. We record
+                    the set of points which follows this computed homography (inliers), with a certain threshold. By repeating this process for a 
+                    certain number of iterations, and keeping the largest set of inliers, we can use these inliers to estimate the homography transformation.
+                    RANSAC is very robust, as outliers that are different from the majority will be excluded. Below is an example of warping performed using 
+                    the homography estimated by RANSAC.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\original_balc1.png" alt="Blend Image 1">
+                        <p class="caption">original balcony left</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\warped_balc1.png" alt="Blend Image 2">
+                        <p class="caption">balcony left warped with homography estimated by RANSAC</p>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Automatic Stitching: Results</h2>
+            <div class="subsection">
+                <p>With all above steps, we are ready for automatic stiching. The actual stiching process is the same with manual stiching,
+                    except that the homography transformation is found automatically from the images instead of using manually labled points.
+                    Below are the comparisons between automatic stiching and manual stiching.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\auto_blended_balc.jpg" alt="Blend Image 1">
+                        <p class="caption">Automatic Stitched</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\blended_balc_down.jpg" alt="Blend Image 2">
+                        <p class="caption">Manually Stitched</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\auto_blended_apartment.jpg" alt="Blend Image 1">
+                        <p class="caption">Automatic Stitched</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\blended_apartment_down.jpg" alt="Blend Image 2">
+                        <p class="caption">Manually Stitched</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\auto_blended_gar.jpg" alt="Blend Image 1">
+                        <p class="caption">Automatic Stitched</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj4\blended_gar_down.jpg" alt="Blend Image 2">
+                        <p class="caption">Manually Stitched</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <section class="part">
+        <div class="container">
+            <h2>Reflection </h2>
+            <div class="subsection">
+                <p>This was a very fun project and I enjoyed it a lot. The coolest thing I learned from this project is the power
+                    of majority. The application of RANSAC made me realize that majority is a very robust condition. Sometimes we don't need
+                    every data to be correct in order to make meaningful results, we only need the majority of the data to be correct. This also 
+                    reminded me of the principle and assumption bitcoins relied on : the majority of computing power is owned by honest people. It is 
+                    facsinating to see the robustness of majority.
+                </p>
+                
+            </div>
+        </div>
+    </section>
     <footer>
         <div class="container">
-            <p>Created by Chengkun Cao | CS180</p>
+            <p>Created by Chengkun Alex Cao | CS180</p>
         </div>
     </footer>
 </body>
