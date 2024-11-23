@@ -29,7 +29,10 @@
     <section class="introduction">
         <div class="container">
             <h2>Introduction</h2>
-            <p>[Your introduction text here explaining the goals and overview of project 5]</p>
+            <p>This project is divided into two parts. In the first part, I will explore the sampling process of diffusion models, 
+                try different denoising methods, and create cool images like visual anagrams, image to image translation, and hybrid images. 
+                In the second part, I will implement my own UNet for diffusion process, and train them on the famous MNIST dataset.
+            </p>
         </div>
     </section>
 
@@ -401,6 +404,331 @@ The quality of the image is quite nice, I am surprised they are quite good with 
                     <div class="image-container">
                         <img src="assets\cs180proj5\partA\part17\car.png" alt="Scale 9.0">
                         <p class="caption">A Car</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection"></div>
+                <h3>1.7.1 Editing Hand-Drawn and Web Images</h3>
+                <p>We can also apply SDEdit to hand-drawn and web images to force them onto the image manifold. Below are the results 
+                    of applying SDEdit with different noise levels to web and hand-drawn images. The first one is a web image, and the second and last one 
+                    are my hand-drawn images.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\web1.png" alt="Scale 1.0">
+                        <p class="caption">Volcano with i_start = 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\web3.png" alt="Scale 2.0">
+                        <p class="caption">Volcano with i_start = 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\web5.png" alt="Scale 3.0">
+                        <p class="caption">Volcano with i_start = 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\web7.png" alt="Scale 4.0">
+                        <p class="caption">Volcano with i_start = 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\web10.png" alt="Scale 5.0">
+                        <p class="caption">Volcano with i_start = 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\web20.png" alt="Scale 7.0">
+                        <p class="caption">Volcano with i_start = 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\volca.png" alt="Scale 9.0">
+                        <p class="caption">Volcano</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_1_1.png" alt="Scale 1.0">
+                        <p class="caption">Apple with i_start = 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_1_3.png" alt="Scale 2.0">
+                        <p class="caption">Apple with i_start = 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_1_5.png" alt="Scale 3.0">
+                        <p class="caption">Apple with i_start = 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_1_7.png" alt="Scale 4.0">
+                        <p class="caption">Apple with i_start = 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_1_10.png" alt="Scale 5.0">
+                        <p class="caption">Apple with i_start = 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_1_20.png" alt="Scale 7.0">
+                        <p class="caption">Apple with i_start = 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand1.png" alt="Scale 9.0">
+                        <p class="caption">Original Apple Sketch</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_2_1.png" alt="Scale 1.0">
+                        <p class="caption">SDEdit with i_start = 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_2_3.png" alt="Scale 2.0">
+                        <p class="caption">SDEdit with i_start = 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_2_5.png" alt="Scale 3.0">
+                        <p class="caption">SDEdit with i_start = 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_2_7.png" alt="Scale 4.0">
+                        <p class="caption">SDEdit with i_start = 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_2_10.png" alt="Scale 5.0">
+                        <p class="caption">SDEdit with i_start = 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\hand_2_20.png" alt="Scale 7.0">
+                        <p class="caption">SDEdit with i_start = 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\pump.png" alt="Scale 9.0">
+                        <p class="caption">Original Pumpkin Sketch</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.7.2 Inpainting</h3>
+                <p>To do image inpainting, I first generate mask specifying the region I want to replace, then I run the diffusion denoising loop,
+                    but at every step, after obtaining x_t, I "force" x_t to have the same pixels as the original image where mask is 0, i.e: \[x_t \leftarrow \mathbf{m}x_t + (1-\mathbf{m})\text{forward}(x_{orig}, t)\]
+                    In this case, we only generate a new image inside the region we want to replace. Below are the results of inpainting for the Campanile and 
+                    two of my own chosen images.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\test_im.png" alt="SDEdit Result 1">
+                        <p class="caption">Campanile</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\mask1.png" alt="SDEdit Result 2">
+                        <p class="caption">Mask</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\to_replace_1.png" alt="SDEdit Result 3">
+                        <p class="caption">Hole to Fill</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint_im1 (9).png" alt="SDEdit Result 4">
+                        <p class="caption">Campanile Inpainted</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint2\people_inpaint.png" alt="SDEdit Result 5">
+                        <p class="caption">Picture of People</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint2\mask_2.png" alt="SDEdit Result 6">
+                        <p class="caption">Mask</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint2\to_replace_2.png" alt="SDEdit Result 7">
+                        <p class="caption">Hole to Fill</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint2\inpaint_im2.png" alt="SDEdit Result 8">
+                        <p class="caption">People Inpainted</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint3\neymar.png" alt="SDEdit Result 9">
+                        <p class="caption">Neymar</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint3\mask_ney.png" alt="SDEdit Result 10">
+                        <p class="caption">Mask</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint3\to_replace_ney.png" alt="SDEdit Result 11">
+                        <p class="caption">Hole to Fill</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\inpaint3\inpaint_im2 (1).png" alt="SDEdit Result 12">
+                        <p class="caption">Neymar Inpainted</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>1.7.3 Text-Conditional Image-to-image Translation</h3>
+                <p>Now we will do SDEdit but guide the projection with a text prompt. The following results are SDEdit on different 
+                    noise levels, with text prompt "a rocket ship". The first one is the campanile, and the last two are images of my own choices (also conditioned on "a rocket ship")
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_1.png" alt="Denoising Result 15">
+                        <p class="caption">Rocket Ship at noise level 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_3.png" alt="Denoising Result 16">
+                        <p class="caption">Rocket Ship at noise level 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_5.png" alt="Denoising Result 17">
+                        <p class="caption">Rocket Ship at noise level 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_7.png" alt="Denoising Result 18">
+                        <p class="caption">Rocket Ship at noise level 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_10.png" alt="Denoising Result 19">
+                        <p class="caption">Rocket Ship at noise level 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_20.png" alt="Denoising Result 20">
+                        <p class="caption">Rocket Ship at noise level 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\test_im.png" alt="Denoising Result 21">
+                        <p class="caption">Campanile</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_toothpaste_1.png" alt="Denoising Result 15">
+                        <p class="caption">Rocket Ship at noise level 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_toothpaste_3.png" alt="Denoising Result 16">
+                        <p class="caption">Rocket Ship at noise level 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_toothpaste_5.png" alt="Denoising Result 17">
+                        <p class="caption">Rocket Ship at noise level 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_toothpaste_7.png" alt="Denoising Result 18">
+                        <p class="caption">Rocket Ship at noise level 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_toothpaste_10.png" alt="Denoising Result 19">
+                        <p class="caption">Rocket Ship at noise level 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_toothpaste_20.png" alt="Denoising Result 20">
+                        <p class="caption">Rocket Ship at noise level 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\tooth.png" alt="Denoising Result 21">
+                        <p class="caption">Toothpaste</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_ironman_1.png" alt="Denoising Result 15">
+                        <p class="caption">Rocket Ship at noise level 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_ironman_3.png" alt="Denoising Result 16">
+                        <p class="caption">Rocket Ship at noise level 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_ironman_5.png" alt="Denoising Result 17">
+                        <p class="caption">Rocket Ship at noise level 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_ironman_7.png" alt="Denoising Result 18">
+                        <p class="caption">Rocket Ship at noise level 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_ironman_10.png" alt="Denoising Result 19">
+                        <p class="caption">Rocket Ship at noise level 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\noisy_ironman_20.png" alt="Denoising Result 20">
+                        <p class="caption">Rocket Ship at noise level 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\1.7.3\ironman.png" alt="Denoising Result 21">
+                        <p class="caption">Ironman/p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.8 Visual Anagrams</h3>
+                <p> To create a visual anagram that look like one thing normally but look like another thing upside down, we can 
+                    denoise an image normally with one prompt, to get one noise estimate, we can then flipp it upside down and  denoise with another prompt 
+                    to get another noise estimate. We then flip the second noise esitame, and average the two. We then proceed with the denoising using the 
+                    new averaged noise estimate. Below are some of the results, where the first image is the original image, and the second image is flipped upside down.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part18\man_campfire (2).png" alt="Denoising Result 1">
+                        <p class="caption">An oil painting of an old man</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part18\man_campfire_flip.png" alt="Denoising Result 2">
+                        <p class="caption">An oil painting of people around campfire</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part18\up.png" alt="Denoising Result 3">
+                        <p class="caption">A parrot sitting on a tree branch</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part18\down.png" alt="Denoising Result 4">
+                        <p class="caption">A blooming garden with flowers and trees</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part18\up (1).png" alt="Denoising Result 5">
+                        <p class="caption">A lion under a tree</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part18\down (1).png" alt="Denoising Result 6">
+                        <p class="caption">A person walking in the forest</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.9 Hybrid Images</h3>
+                <p>To implement the make hybrids function, I will first estimate the noise separately using two different prompts, then 
+                    create a composite noise estimate by combining the low frequencies from one noise stimate with high frequencies from the other, i.e.:
+                    <div style="text-align: center; margin: 20px 0;">
+                        \[\varepsilon_1 = \text{UNet}(x_t, t, p_1)\]
+                        \[\varepsilon_2 = \text{UNet}(x_t, t, p_2)\]
+                        \[\varepsilon = f_\text{lowpass}(\varepsilon_1) + f_\text{highpass}(\varepsilon_2)\]
+                    </div>
+                    We then use the same sampling process, but using the new composite noise estimate. For low pass gaussian filter I used kernel size 33 and sigma 2.
+                    Below are some of the results.
+                </p>
+                <div class="image-row">
+                    <div class="image-container centered">
+                        <img src="assets\cs180proj5\partA\part18\skull_fall (2).png" alt="Denoising Result 7">
+                        <p class="caption">Hybrid image of a skull and a waterfall</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container centered">
+                        <img src="assets\cs180proj5\partA\part18\lion and skull.png" alt="Denoising Result 8">
+                        <p class="caption">Hybrid image of a lion and a skull</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container centered">
+                        <img src="assets\cs180proj5\partA\part18\hybrid2 (1).png" alt="Denoising Result 9">
+                        <p class="caption">Hybrid image of flower patterns and a human skeleton</p>
                     </div>
                 </div>
             </div>
