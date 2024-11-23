@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 5 - CS180</title>
+    <link rel="stylesheet" href="css\cs180proj5.css">
+    <!-- Include MathJax -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Fun with Diffusion Models!</h1>
+            <p>CS180 - Fall 2024 Alex Cao</p>
+        </div>
+    </header>
+
+    <nav class="project-parts">
+        <div class="container">
+            <div class="parts-container">
+                <a href="#partA" class="part-link active">Part A: Diffusion Models</a>
+                <a href="#partB" class="part-link">Part B: Stable Diffusion</a>
+            </div>
+        </div>
+    </nav>
+
+    <section class="introduction">
+        <div class="container">
+            <h2>Introduction</h2>
+            <p>[Your introduction text here explaining the goals and overview of project 5]</p>
+        </div>
+    </section>
+
+    <section id="partA" class="part">
+        <div class="container">
+            <h2>Part A: Diffusion Models</h2>
+            <div class="subsection">
+                <h3>Setup</h3>
+                <p> In this project, we are using DeepFloyd IF diffusion model. This is a two stage model: the first stage produces images of
+                    size 64 x 64, and the second stage takes the output from the first stage and upscale it to 256 x256.
+                    Below are the results of generation using the three text prompts provided in the project spec. 
+                    
+The quality of the image is quite nice, I am surprised they are quite good with only 20 denoising steps. Especially the picture of the man wearing a hat is very realistic. The images are also very related to prompt, as they reflect the prompt very well. The objects are exactly what being described in prompts, and also for first image, the image also accurately reflected the oil painting style mentioned in prompt.
+                </p>
+                <div class="image-grid">
+                    <div class="image-row">
+                        <div class="image-container">
+                            <img src="assets\cs180proj5\partA\part0_1.png" alt="Image 1">
+                            <p class="caption">an oil painting of a snowy mountain village (stage 1)</p>
+                        </div>
+                        <div class="image-container">
+                            <img src="assets\cs180proj5\partA\part_0_3.png" alt="Image 2">
+                            <p class="caption">a man wearing a hat (stage 1)</p>
+                        </div>
+                        <div class="image-container">
+                            <img src="assets\cs180proj5\partA\part_0_2.png" alt="Image 3">
+                            <p class="caption">a rocket ship (stage 1)</p>
+                        </div>
+                    </div>
+                    <div class="image-row">
+                        <div class="image-container">
+                            <img src="assets\cs180proj5\partA\part00.png" alt="Image 4">
+                            <p class="caption">an oil painting of a snowy mountain village (stage 2)</p>
+                        </div>
+                        <div class="image-container">
+                            <img src="assets\cs180proj5\partA\part01.png" alt="Image 5">
+                            <p class="caption">a man wearing a hat (stage 2)</p>
+                        </div>
+                        <div class="image-container">
+                            <img src="assets\cs180proj5\partA\part02.png" alt="Image 6">
+                            <p class="caption">a rocket ship (stage 2)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>Noise Level Analysis</h3>
+                <p>Below is the result of generation using the prompt "an oil painting of a snowy mountain village" using different number of denoising steps.
+                We can see that with the increase of denoising steps, the image seems to be more colorful and detailed. Maybe more denoising steps
+                allow the model to generate more "oil paintingness" in the image.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part00.png" alt="Low noise test">
+                        <p class="caption">20 denoising steps</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part_0_60.png" alt="Medium noise test">
+                        <p class="caption">60 denoising steps</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part_0_80.png" alt="High noise test">
+                        <p class="caption">80 denoising steps</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.1 Implementing the Forward Process</h3>
+                <p>For this part, I implemented the forward function. I got alpha_cumprod by indexing the t-th element
+                    in alphas_cumprod, and epislon is generated using torch.randn_like. Below are the Berkeley campinile at different noise levels. </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\test_im.png" alt="Guidance level 1">
+                        <p class="caption">Berkeley Campanile</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11.png" alt="Guidance level 3">
+                        <p class="caption">Noisy Campanile at t=250</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11_2.png" alt="Guidance level 5">
+                        <p class="caption">Noisy Campanile at t=500</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11_3.png" alt="Guidance level 7">
+                        <p class="caption">Noisy Campanile at t=750</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="subsection">
+                <h3>1.2 Classical Denoising</h3>
+                <p>In this part I applied guassian bluring with kernel size equals 5 and sigma equals 3. Below are the 
+                    side by side result of guassian blur filtering and the original noisy image.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11.png" alt="Backward process step 1">
+                        <p class="caption">Noisy Campanile at t=250</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11_2.png" alt="Backward process step 2">
+                        <p class="caption">Noisy Campanile at t=500</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11_3.png" alt="Backward process step 3">
+                        <p class="caption">Noisy Campanile at t=750</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\250_blur.png" alt="Backward process step 4">
+                        <p class="caption">Gaussian Blur Denoising at t = 250</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\500_blur.png" alt="Backward process step 5">
+                        <p class="caption">Gaussian Blur Denoising at t = 500</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\750_blur.png" alt="Backward process step 6">
+                        <p class="caption">Gaussian Blur Denoising at t = 750</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection"></div>
+                <h3>1.3 One-Step Denoising</h3>
+                <p>To perform one-step denoising, I first use the forward process to generate a noisy image at given 
+                    noise level t, then I use the stage 1 unet to predict the noise. Once I have the predicted noise, I obtained the clean 
+                    image by solving for X0 in the equation \[ x_t = \sqrt{\bar{\alpha}_t}x_0 + \sqrt{1-\bar{\alpha}_t}\epsilon \quad \text{where} \quad \epsilon \sim \mathcal{N}(0,1) \]
+                    Below are the original image, and the noisy images and one-step denoised images at different noise levels.
+                </p>
+                <div class="image-row">
+                    <div class="image-container centered">
+                        <img src="assets\cs180proj5\partA\test_im.png" alt="Backward process step 1">
+                        <p class="caption">Original Image</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11.png" alt="Backward process step 1">
+                        <p class="caption">Noisy Campanile at t=250</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11_2.png" alt="Backward process step 2">
+                        <p class="caption">Noisy Campanile at t=500</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part11_3.png" alt="Backward process step 3">
+                        <p class="caption">Noisy Campanile at t=750</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\one_step_1.png" alt="Backward process step 4">
+                        <p class="caption">One-Step Denoised Campanile at t = 250</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\one_step_2.png" alt="Backward process step 5">
+                        <p class="caption">One-Step Denoised Campanile at t = 500</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\one_step_3.png" alt="Backward process step 6">
+                        <p class="caption">One-Step Denoised Campanile at t = 750</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.4 Iterative Denoising</h3>
+                <p>Creating a list of monotonically decreasing timesteps starting at 990, with a stride of 30, ending at 0, I followed 
+                    this formula to iteratively denoise the image: \[ x_{t'} = \frac{\sqrt{\bar{\alpha}_{t'}}\beta_t}{1-\bar{\alpha}_t}x_0 + \frac{\sqrt{\alpha_t}(1-\bar{\alpha}_{t'})}{1-\bar{\alpha}_t}x_t + v_\sigma \]
+                    Below is a series of images during every 5th loop of denoising process. Further below, I have showed the original image, the iteratively denoised image, 
+                    one-step denoised image, and gaussian blurred image for comparison.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\iterative_denoise_i90.png" alt="Comparison 1">
+                        <p class="caption">Noisy Campanile at t=90</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\iterative_denoise_i240.png" alt="Comparison 2">
+                        <p class="caption">Noisy Campanile at t=240</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\iterative_denoise_i390.png" alt="Comparison 3">
+                        <p class="caption">Noisy Campanile at t=390</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\iterative_denoise_i540.png" alt="Comparison 4">
+                        <p class="caption">Noisy Campanile at t=540</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\iterative_denoise_i690.png" alt="Comparison 5">
+                        <p class="caption">Noisy Campanile at t=690</p>
+                    </div>
+                </div>
+                <p> We can see that iteratively denoised image has the best quality, followed by one-step denoised image, and then gaussian blurred image has the worst quality.</p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\test_im.png" alt="Result 1">
+                        <p class="caption">Original</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\iterative_denoise_final.png" alt="Result 2">
+                        <p class="caption">Iteratively Denoised Campanile</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\clean_one_step.png" alt="Result 3">
+                        <p class="caption">One-Step Denoised Campanile</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part14\image_0.png" alt="Result 4">
+                        <p class="caption">Gaussian Blurred Campanile</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="partB" class="part">
+        <div class="container">
+            <h2>Part B: Diffusion Models from Scratch!</h2>
+            <!-- Your Part B content here -->
+             
+            <div class="subsection">
+                <h3>Single step Denoising UNet</h3>
+                <h3>1.1 Implementing the UNet</h3>
+                <p> First we need to implement the UNet. A UNet consists of a few downsampling and upsampling blocks with skip connections. In this part, I will be building Unets to
+                    be trained on the famous MNIST dataset.</p>
+            </div>
+            <div class="subsection">
+                <h3>1.2 Using the UNet to Train a Denoiser</h3>
+                <p>To train the denoiser, we would need training data pairs of (z,x) where each x is a clean MNIST digit and z is a noisy image. For each training batch,
+                    <div style="text-align: center; margin: 20px 0;">\[ z = x + \sigma\varepsilon, \text{ where } \varepsilon \sim \mathcal{N}(0, I) \]</div>
+                    noising processes, over sigma = [0.0,0.2,0.4,0.5,0.6,0.8,1.0]
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\partB1_2.png" alt="graph">
+                    <p class="caption">Varying levels of noise on MNIST digits</p>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.2.1 Training</h3>
+                <p> I implemented the UNet according to figure 1 and figure2 in the project spec. Then, I trained the denoiser on MNIST
+                    dataset with noisy image z of sigma = 0.5 applied to clean image x. I have trained the model for 5 epochs, below is the training losses
+                    during the training process (of linear scale).
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\unconditional_train_curve.png" alt="Denoising Results">
+                    <p class="caption">Training Loss Curve (Linear Scale)</p>
+                </div>
+            </div>
+            <div class="subsection">
+                <p>Below are sample results after the 1st and 5th epoch.</p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\denoising_ep1.png" alt="Images">
+                    <p class="caption"> Results on digits from the test set after 1 epoch of training</p>
+                </div>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\denoising_ep5.png" alt="Images">
+                    <p class="caption">Results on digits from the test set after 5 epoch of training</p>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.2.2 Out-of-Distribution Testing</h3>
+                <p>Because the denoiser was trained on MNIST digits noised with sigma = 0.5, it might not perform well
+                    given other noise levels. Below are the denoiser results on test set digits with noise sigma = [0.0, 0.2, 0.4, 0.5, 0.6, 0.8, 1.0].
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\out_of_distribution.png" alt="Image">
+                    <p class="caption"> Results on digits from the test set with varying noise levels</p>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>Time Conditioned UNet</h3>
+                <p>Following figure 8 and figure 9 in the project spec, I implemented the fully-connected block and injected
+                    the conditioning signal into the UNet. For training, I followed Algorithm B.1. in spec-- pick a random image from the training
+                    set, a random t, and train the denoiser to predict the noise added. This is repeated for different images and different t values until convergence.
+                    Below is the training loss curve of the time conditioned UNet. (Linear Scale, and I used parameters specified in the spec)
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\time_conditioned_train_curve.png" alt="Image">
+                    <p class="caption">Time-Conditioned UNet training loss curve (Linear Scale)</p>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>Sampling results</h3>
+                <p>The sampling process is very similar to previous parts, here I followed Algorithm B.2. in project spec. Below
+                    are the sampling results for the time-conditioned UNet for 5 and 20 epochs. They are made as gif to demonstrate the 
+                    denoising process.
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\time_5.gif" alt="Sampling Process 1" loop="infinite">
+                    <p class="caption">Sampling process (epoch 5)</p>
+                </div>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\time_20.gif" alt="Sampling Process 2" loop="infinite">
+                    <p class="caption">Sampling process (epoch 20)</p>
+                </div>
+            </div>
+            <div class="subsection"></div>
+                <h3>Adding Class-Conditioning to UNet</h3>
+                <p>Following the project spec, I added class condition via injecting the class label c into the time-conditioned UNet
+                    model. In addition, a dropout layer (dropout probability = 0.1) is also added so some times the tensor c is set to 0, and the model
+                    can still perform well without a class label. The training process is very similar to the previous part, with the only difference being 
+                    adding the conditioning vector c. Below is the training loss curve of the class-conditioned UNet. 
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\class-condition_training_curve.png" alt="Image">
+                    <p class="caption">Class-Conditioned UNet training loss curve (Linear Scale)</p>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>Sampling results</h3>
+                <p>I followed Algorithm B.4. in project spec to perform cfg sampling. Below
+                    are the sampling results for the Class-conditioned UNet for 5 and 20 epochs. They are made as gif to demonstrate the 
+                    denoising process.
+                </p>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\class_5.gif" alt="Sampling Process 1" loop="infinite">
+                    <p class="caption">Sampling process (epoch 5)</p>
+                </div>
+                <div class="image-container centered">
+                    <img src="assets\cs180proj5\partB\class_20.gif" alt="Sampling Process 2" loop="infinite">
+                    <p class="caption">Sampling process (epoch 20)</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="bells-whistles">
+        <div class="container">
+            <h2>Bells and Whistles</h2>
+            <div class="subsection">
+                <h3>Sampling Gifs</h3>
+                <p>By keeping track of the intermediate denoising results (I used interval of 10 denoising steps), I made gifs to visualize the denoising process further.
+                    Below is a summary of the Time conditioned model and Class conditioned model sampling gifs.
+                </p>
+                
+                <h4>Time-Conditioned Model Results:</h4>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\time_5.gif" alt="Time-Conditioned Sampling (5 epochs)" loop="infinite">
+                        <p class="caption">Time-Conditioned Model (epoch 5)</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\time_20.gif" alt="Time-Conditioned Sampling (20 epochs)" loop="infinite">
+                        <p class="caption">Time-Conditioned Model (epoch 20)</p>
+                    </div>
+                </div>
+
+                <h4>Class-Conditioned Model Results:</h4>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\class_5.gif" alt="Class-Conditioned Sampling (5 epochs)" loop="infinite">
+                        <p class="caption">Class-Conditioned Model (epoch 5)</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\class_20.gif" alt="Class-Conditioned Sampling (20 epochs)" loop="infinite">
+                        <p class="caption">Class-Conditioned Model (epoch 20)</p>
+                    </div>
+                </div>
+
+                <p>This comparison clearly shows the progression of both models' capabilities across training epochs, demonstrating the improvements in image quality and stability as training progresses.</p>
+            </div>
+        </div>
+            <div class="subsection">
+                <h3>Stationary pictures</h3>
+                <p>I realized that the infinitely looping gifs might be hard to read, so here I have included the exact same 
+                    gifs, looping only once, for readers to better see the result of the denoising process.
+                </p>
+                
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\time_conditioned_5.gif" alt="Time-Conditioned Warped Sampling (5 epochs)" loop="infinite">
+                        <p class="caption">Time-Conditioned Warped Model (epoch 5)</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\time_conditioned_20.gif" alt="Time-Conditioned Warped Sampling (20 epochs)" loop="infinite">
+                        <p class="caption">Time-Conditioned Warped Model (epoch 20)</p>
+                    </div>
+                </div>
+
+                <h4>Class-Conditioned Warped Results:</h4>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\class_conditioned_5.gif" alt="Class-Conditioned Warped Sampling (5 epochs)" loop="infinite">
+                        <p class="caption">Class-Conditioned Warped Model (epoch 5)</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partB\class_conditioned_20.gif" alt="Class-Conditioned Warped Sampling (20 epochs)" loop="infinite">
+                        <p class="caption">Class-Conditioned Warped Model (epoch 20)</p>
+                    </div>
+                </div>
+
+                <p>These warped sampling results show an alternative visualization of the denoising process, highlighting different aspects of how the models learn to generate images.</p>
+            </div>
+    </section>
+
+    <section class="reflection">
+        <div class="container">
+            <h2>Reflection</h2>
+            <div class="subsection">
+                <p>This is a very fun project and I learned a lot!</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Created by Chengkun Alex Cao | CS180</p>
+        </div>
+    </footer>
+</body>
+</html>
