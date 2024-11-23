@@ -246,6 +246,164 @@ The quality of the image is quite nice, I am surprised they are quite good with 
                     </div>
                 </div>
             </div>
+            <div class="subsection">
+                <h3>1.5 Diffusion Model Sampling</h3>
+                <p>In this part, I used iterative_denoise and set i_start = 0; I passed in random noise generated using torch.randn, and 
+                    used the prompt embedding of "a high quality photo". Here are five results sampled using this procesure, with a seed of 1104.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part15\diffusion output 0.png" alt="Noise Level 1">
+                        <p class="caption">Sample 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part15\diffusion output 1.png" alt="Noise Level 2">
+                        <p class="caption">Sample 2</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part15\diffusion output 2.png" alt="Noise Level 3">
+                        <p class="caption">Sample 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part15\diffusion output 3.png" alt="Noise Level 4">
+                        <p class="caption">Sample 4</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part15\diffusion output 4.png" alt="Noise Level 5">
+                        <p class="caption">Sample 5</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection"></div>
+                <h3>1.6 Classifier-Free Guidance</h3>
+                <p> Some of the images in the prior section are not very good. To address this, we can perform classifier-free guidance.
+                    This is done by computing both a noise estimate conditioned on the prompt, and an unconditional noise estimate, then we
+                    calculate our new noise estimate as: \[\varepsilon = \varepsilon_u + \gamma(\varepsilon_c - \varepsilon_u)\]
+                    where epsilon_u is the unconditional noise estimate, and epsilon_c is the conditional noise estimate, and gamma is the guidance scale.
+                    To get the unconditional noise estimate, we can simpy pass an empty prompt embedding to the model. The rest of the process is same as last part.
+                    Below are some results using classifier-free guidance and a seed of 2002.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part16\cfg0.png" alt="Noise Level 1">
+                        <p class="caption">Sample 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part16\cfg1.png" alt="Noise Level 2">
+                        <p class="caption">Sample 2</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part16\cfg2.png" alt="Noise Level 3">
+                        <p class="caption">Sample 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part16\cfg3.png" alt="Noise Level 4">
+                        <p class="caption">Sample 4</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part16\cfg4.png" alt="Noise Level 5">
+                        <p class="caption">Sample 5</p>
+                    </div>
+                </div>
+            </div>
+            <div class="subsection">
+                <h3>1.7 Image-to-image Translation</h3>
+                <p>If we take an image, add some noise to it, and then denoise it, we would get an image that is similar to the original image. 
+                    The more noise we add and remove, the more different the denoised image would be from the original image. In this part, I added
+                    different amounts of noises to images, and then denoise them using text prompt "a high quality photo" to get new images (follows the SDEdit algorithm). Below are 
+                    some examples with different noise levels.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\sdedit0.png" alt="Scale 1.0">
+                        <p class="caption">SDEdit with i_start = 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\sdedit1.png" alt="Scale 2.0">
+                        <p class="caption">SDEdit with i_start = 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\sdedit2.png" alt="Scale 3.0">
+                        <p class="caption">SDEdit with i_start = 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\sdedit3.png" alt="Scale 4.0">
+                        <p class="caption">SDEdit with i_start = 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\sdedit4.png" alt="Scale 5.0">
+                        <p class="caption">SDEdit with i_start = 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\sdedit5.png" alt="Scale 7.0">
+                        <p class="caption">SDEdit with i_start = 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\test_im.png" alt="Scale 9.0">
+                        <p class="caption">Campanile</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree0.png" alt="Scale 1.0">
+                        <p class="caption">SDEdit with i_start = 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree1.png" alt="Scale 2.0">
+                        <p class="caption">SDEdit with i_start = 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree2.png" alt="Scale 3.0">
+                        <p class="caption">SDEdit with i_start = 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree3.png" alt="Scale 4.0">
+                        <p class="caption">SDEdit with i_start = 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree4.png" alt="Scale 5.0">
+                        <p class="caption">SDEdit with i_start = 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree5.png" alt="Scale 7.0">
+                        <p class="caption">SDEdit with i_start = 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\tree.png" alt="Scale 9.0">
+                        <p class="caption">A Tree</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car0.png" alt="Scale 1.0">
+                        <p class="caption">SDEdit with i_start = 1</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car1.png" alt="Scale 2.0">
+                        <p class="caption">SDEdit with i_start = 3</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car2.png" alt="Scale 3.0">
+                        <p class="caption">SDEdit with i_start = 5</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car3.png" alt="Scale 4.0">
+                        <p class="caption">SDEdit with i_start = 7</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car4.png" alt="Scale 5.0">
+                        <p class="caption">SDEdit with i_start = 10</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car5.png" alt="Scale 7.0">
+                        <p class="caption">SDEdit with i_start = 20</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj5\partA\part17\car.png" alt="Scale 9.0">
+                        <p class="caption">A Car</p>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
