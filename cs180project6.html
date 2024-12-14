@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Projects Portfolio</title>
+    <link rel="stylesheet" href="css/cs180proj6.css">
+    <!-- Include MathJax if you need mathematical equations -->
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Chengkun Cao - CS180 Project 6</h1>
+            <p>Chengkun Cao - CS180 - Fall 2024</p>
+        </div>
+    </header>
+
+    <nav class="project-parts">
+        <div class="container">
+            <div class="parts-container">
+                <a href="#project1" class="part-link active">Image Quilting</a>
+                <a href="#project2" class="part-link">Light Fields</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Project 1 -->
+    <section id="project1" class="project">
+        <div class="container">
+            <h2 class="project-title">Image Quilting</h2>
+            
+            <div class="project-introduction">
+                <h3>Introduction</h3>
+                <p>In this project I will implement the image quilting algorithm for teture synthesis and transfer described by
+                    SIGGRAPH 2001 paper by Efros and Freeman. The goal is to create a larger texture image from a small sample.
+                    This has many interestin applications, for example texture transfer, which I will explore later in this project.
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Randomly sampled Texture</h3>
+                <p>To start with, I will implement the most naive way: randomly sample square patches of size patch_size from a Sample
+                    to create an output image. Below is an example of this naive implementation. </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\bricks_small.jpg" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\random\bricks_small.jpg" alt="Description">
+                        <p class="caption">Output image, output size: 200x200, patch_size: 15 </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Overlapping Patches</h3>
+                <p>Clearly this is not enough. To improve, I will implement an algorithm that places patches that overlaps with previous
+                    patches, and the patches will be selected from the sample image with lowest ssd distance at the overlap section. The selction
+                    is done with some tolerance tol. Below is an example of this implementation on the same sample image.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\bricks_small.jpg"alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\simple\bricks_small.jpg" alt="Description">
+                        <p class="caption">Output image, output size: 500x500, patch_size: 35, overlap: 20, tol:5 </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Seam Finding</h3>
+                <p>The above implementation is a lot better, but we still notice some edges in the output image. To improve,
+                    I will implement the seam finding algorithm in section 2.1 of the paper. Here are some results.
+                </p>
+        
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\bricks_small.jpg" alt="Sample 1">
+                        <p class="caption">Sample</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\seam\bricks_small.png" alt="Result 1">
+                        <p class="caption">Output: output size: 500x500, patch_size: 35, overlap: 20, tol:5</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\cookie.jpg" alt="Sample 2">
+                        <p class="caption">Sample cookie</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\seam\cookie.jpg" alt="Result 2">
+                        <p class="caption">Output</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\icecream.jpg" alt="Sample 3">
+                        <p class="caption">Sample icecream</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\seam\icecream.jpg" alt="Result 3">
+                        <p class="caption">Output</p>
+                    </div>
+                </div>
+
+                <p>Below is some illustration of the seam finding process. Specifically, I have chosen one selected patch at random,
+                    and displayed the overlapping portions, pixelwise SSD cost, the horizontal and vertical masks, and the combined masks.
+                </p>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\debug\overlapping_portions.png" alt="Sample 3">
+                        <p class="caption">The overlapping portions</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\debug\ssd_cost.png" alt="Result 3">
+                        <p class="caption">The pixelwise SSD cost</p>
+                    </div>
+                </div>
+                <div class="image-row">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\debug\the_masks.png" alt="Sample 3">
+                        <p class="caption">The horizontal and vertical masks</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\debug\combined_mask.png" alt="Result 3">
+                        <p class="caption">The combined mask (Indiating which pixels are selected from which patch)</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Texture transfer</h3>
+                <p> With the edge artifact removed, we are ready to implement texture transfer. The high level idea is that when we
+                    pick on patch from the sample image, we not only consider the similarity between the patch and the overlap region,
+                    we also consider the similarity between the patch and the guidance image(the target image). We control the guidance scale
+                    with alpha, where the final metric for ssd is defined as the weighted interpolation between guidance ssd and the overlap 
+                    ssd. Below are some examples of texture transfer.
+                </p>
+                <div class="image-row-three">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\bricks_small.jpg" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\f.png" alt="Description">
+                        <p class="caption">target image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\transfer\feynman_bricks.png" alt="Description">
+                        <p class="caption">Output image</p>
+                    </div>
+                </div>
+                <div class="image-row-three">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\s.png" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\f.png" alt="Description">
+                        <p class="caption">target image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\transfer\feynman_sketch.png" alt="Description">
+                        <p class="caption">Output image</p>
+                    </div>
+                </div>
+
+                <div class="image-row-three">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\chocolate.png" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\eistein.jpg" alt="Description">
+                        <p class="caption">target image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\transfer\chocolate_eistein.png" alt="Description">
+                        <p class="caption">Chocolate Einstein</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h2>Bells and Whistles : Iterative Texture Transfer</h2>
+                <p> In section 3 of the paper, the authors discussed an iterative texture transfer algorithm, which have been shown significantly
+                    improve the quality of the result. The high level idea is to iteratively apply the texture transfer algorithm starting with higher
+                    patch sizes, and in each following iteration, decrease the patch size and finetune alpha. When deciding what patches to sample,
+                    in addition to calculating the overlap ssd in the overlap region, also take into account the ssd of the sample patch and what has already been there from the last iteration. 
+                    The intution behind this is that this is a "coarse to fine" process, where we first fill in the large scale details, and then fill in the small scale details.
+                    Below are the results from the iterative texture transfer.
+                </p>
+                <div class="image-row-three">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\s.png" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\f.png" alt="Description">
+                        <p class="caption">target image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\iterative_transfer\feynman_sketch.png" alt="Description">
+                        <p class="caption">Output image</p>
+                    </div>
+                </div>
+
+                <div class="image-row-three">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\chocolate.png" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\eistein.jpg" alt="Description">
+                        <p class="caption">target image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\iterative_transfer\chocolate_eistein.png" alt="Description">
+                        <p class="caption">Chocolate Einstein</p>
+                    </div>
+                </div>
+
+                <div class="image-row-three">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\bricks_small.jpg" alt="Description">
+                        <p class="caption">sample image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\samples\f.png" alt="Description">
+                        <p class="caption">target image</p>
+                    </div>
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\iterative_transfer\feynman_bricks_2.png" alt="Description">
+                        <p class="caption">Output image</p>
+                    </div>
+                </div>
+            </div>
+           
+        </div>
+    </section>
+
+    <!-- Project 2 -->
+    <section id="project2" class="project">
+        <div class="container">
+            <h2 class="project-title">Project 2: LightField Camera</h2>
+            
+            <div class="project-introduction">
+                <h3>Introduction</h3>
+                <p>This projects focuses on depth refocusing and aperture adjustment with light field Data. The data 
+                    I am using comes from <a href="http://lightfield.stanford.edu/lfs.html">Stanford Light Field Archive</a>
+                    This is basically commprised of mmultiple images taken over a regularly space grid.
+                    In light field photography, objects at different depths appear differently when viewed from multiple camera positions. 
+                    Far objects stay relatively fixed while near objects shift more significantly across the grid of images. By averaging all images without shifts, 
+                    far objects remain sharp while near ones become blurry. 
+                </p>
+            </div>
+
+            <div class="subsection">
+                <h3>Depth Refocusing</h3>
+                <p> We can use this intersting effect to simulate a change in focus. First we need to pick a center image as reference.
+                    Here I used the image (08,08) because the dataset is comprised of 17x17 images.If we shift all images toward the center image,
+                    i.e., shift every image by a scalar factor c multiplied by the difference between coordinates of the reference image and images,
+                    we can simulate a different focus. Varying c will give us different focus. Below is a gif showing a simulation of 
+                    depth refocusing using c from range [-0.5, 0.1], every frame is generated using every image in the dataset for better quality.
+                </p>
+                <div class="image-row-single">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\depth_variation.gif" alt="Far focus">
+                        <p class="caption">Focus of chessboard at different depths</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="subsection">
+                <h3>Aperture Adjustment</h3>
+                <p> There is other intersting things we can do with light field data. For example, we can simulate a change in aperture.
+                    This is because averaging a large number of images sampled over the grid perpendicular to the optical axis mimics a camera
+                    with larger apperture, while using fewer images mimics a smaller aperture. Focusing on the center image (08,08), I used the parameter
+                    r to control the simulated aperture. Basically r controls the radisu around the focus image that are used to generate the final image.
+                    If r = 1, that means all images within radius 1 (for example, (07,08), (08,08), (09,08), etc.) are used to generate the final image.
+                    A larger r means more images are used to generate the final image, simulating a larger aperture. For all aperture, I fixed c to make 
+                    the depth of focus roughly at the center of the image. Below is a gif showing the aperture adjustment.
+                </p>
+                <div class="image-row-single">
+                    <div class="image-container">
+                        <img src="assets\cs180proj6\aperture_variation.gif" alt="Far focus">
+                        <p class="caption">Aperture adjustment GIF</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="project-conclusion">
+                <h3>Summary</h3>
+                <p> This is a very fun but very inspiring project! This project gave me deeper understanding of how 
+                    cameras work, especially how aperture and focus works. The one thing that I found most interesting is that we can actually
+                    simulate change in aperture and depth of focus using light field data. To me, this shows the power of taking average, during
+                    this course there were always interesting findings when we take average of a large number of samples (like the mean face).
+                    To sum up, this is a very fun project and I enjoyed a lot working on it!
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <p>Alex Cao - cs180 - Fall 2024</p>
+        </div>
+    </footer>
+</body>
+</html>
